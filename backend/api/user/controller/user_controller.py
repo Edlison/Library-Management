@@ -1,52 +1,36 @@
 # @Author  : Edlison
 # @Date    : 12/28/20 18:10
 from backend.api.user import user_blu
-from flask import request, jsonify, session, make_response
-import json
-from backend.api import db
+from flask import request, jsonify, session
+from backend.filter.login_filter import need_login
 from backend.api.user.models.user_model import User
 from backend.result.system_result import SystemResult
-
-
-@user_blu.route('/edlison', methods=['GET'])
-def user_home():
-    print('request success')
-    return 'hello'
+from backend.util.serialize import serialize_model_list
 
 
 @user_blu.route('/login', methods=['POST'])
 def login():
-    data = request.get_data()
-    print('data1:',data)
-    data = json.loads(data)
-    data = data['data']
-    session['username']=data['username']
-    print(session.get('username'))
-    return jsonify(data)
-
-
-@user_blu.route('/create', methods=['POST'])
-def create():
-    db.create_all()
-    return make_response('ok')
-
-
-@user_blu.route('/insert', methods=['POST'])
-def insert():
-    admin = User('admin', 'admin123')
-    edlison = User('edlison', 'qwer1234!')
-    admin.set_role(1)
-    edlison.set_role(2)
-    db.session.add(admin)
-    db.session.add(edlison)
-    db.session.commit()
-    return make_response('ok')
-
-
-@user_blu.route('/getRes', methods=['POST'])
-def getRes():
-    users = User.query.all()
+    user_name = request.form['user_name']
+    session['user_name'] = user_name
     res = SystemResult().ok()
-    res.set_data([dict(users[0]), dict(users[1])])
-    print(res)
+    res.set_data(user_name)
     return jsonify(dict(res))
+
+
+@user_blu.route('/get_info', methods=['POST'])
+@need_login
+def get_info():
+    user_name = session.get('user_name')
+    if user_name:
+        users = User.query.filter_by(user_name=user_name).all()
+        if users and len(users) == 1:
+            res = SystemResult().ok()
+            res.set_data(serialize_model_list(users))
+            return jsonify(dict(res))
+        else:
+            res = SystemResult().error('找到多个用户')
+            res.set_data(dict(users))
+            return jsonify(dict(res))
+    else:
+        res = SystemResult().error('未找到用户')
+        return jsonify(dict(res))

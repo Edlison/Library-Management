@@ -21,7 +21,7 @@ class User(db.Model):
         self.user_role = role
 
     def keys(self):
-        return ['user_id', 'user_name']
+        return ['user_name', 'user_password', 'user_role']
 
     def __getitem__(self, item):
         return getattr(self, item)
