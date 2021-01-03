@@ -1,7 +1,5 @@
 import json
 from flask import jsonify,request
-
-from backend.api import db
 from backend.api.catalog.mapper.catalog_SQL import insert_noreturn,insert_return
 from backend.api.catalog.mapper.catalog_SQL import search_book_ISBN,search_catalog_id,search_all,search_state,search_book_state
 from backend.api.catalog.mapper.catalog_SQL import update_book_num
