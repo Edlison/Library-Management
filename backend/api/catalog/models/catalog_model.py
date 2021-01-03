@@ -1,7 +1,6 @@
 from datetime import datetime
-
 from backend.api import db
-from  flask_sqlalchemy import SQLAlchemy
+
 
 class Catalog(db.Model):
     __tablename__ = 'catalog'
@@ -11,6 +10,7 @@ class Catalog(db.Model):
     book_author = db.Column(db.String(50),nullable = True)
     book_public_company = db.Column(db.String(50),nullable = True)
     book_num = db.Column(db.Integer,nullable = True, default = 1)
+    book_remainder_num = db.Column(db.Integer,nullable = True)
     book_state = db.Column(db.Integer,nullable = True)
     book_catalog_time = db.Column(db.DateTime, default=datetime.now)
     book_return_reason = db.Column(db.String(50))
@@ -22,6 +22,7 @@ class Catalog(db.Model):
                 'book_author',
                 'book_public_company',
                 'book_num',
+                'book_remainder_num',
                 'book_state',
                 'book_catalog_time',
                 'book_return_reason']

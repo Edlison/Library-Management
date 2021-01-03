@@ -1,6 +1,7 @@
+import json
 from backend.api.interview.models.interview_model import Interview
 from backend.api import db
-import json
+
 
 def insert(book_ISBN,book_name,book_price,book_author,book_public_company,book_num,user_id):
     #查询是否有重复推荐

@@ -1,9 +1,6 @@
 from flask import  jsonify,request
-
 from backend.api import db
 from backend.api.interview.mapper.interview_SQL import insert,search
-
-
 from backend.api.interview import interview_blu
 from backend.result.system_result import SystemResult
 
