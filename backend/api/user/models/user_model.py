@@ -5,15 +5,15 @@ from backend.api import db
 
 class User(db.Model):
     __tablename__ = 'user'
-    user_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    user_name = db.Column(db.String(32), unique=True, nullable=False)
-    user_password = db.Column(db.String(255), nullable=False)
-    user_role = db.Column(db.Integer, nullable=False)
-    user_borrowing = db.Column(db.Integer, nullable=True)
-    user_reserving = db.Column(db.Integer, nullable=True)
-    user_credit = db.Column(db.Integer, nullable=True)
-    user_create_time = db.Column(db.DateTime, nullable=True)
-    user_last_login_time = db.Column(db.DateTime, nullable=True)
+    user_id = db.Column(db.Integer, primary_key=True, autoincrement=True, comment='用户ID')
+    user_name = db.Column(db.String(32), unique=True, nullable=False, comment='用户名')
+    user_password = db.Column(db.String(255), nullable=False, comment='密码')
+    user_role = db.Column(db.Integer, nullable=False, comment='用户角色')
+    user_borrowing = db.Column(db.Integer, nullable=True, comment='借书不能超过3本')
+    user_reserving = db.Column(db.Integer, nullable=True, comment='预约不能超过1本')
+    user_credit = db.Column(db.Integer, nullable=True, comment='信用机制 暂时没用')
+    user_create_time = db.Column(db.DateTime, nullable=True, comment='用户创建时间')
+    user_last_login_time = db.Column(db.DateTime, nullable=True, comment='用户上次登陆时间')
 
     def __init__(self, user_name, user_password, user_role):
         self.user_name = user_name
