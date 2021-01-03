@@ -18,6 +18,12 @@ class SystemResult:
         self.msg = msg
         return self
 
+    def is_ok(self):
+        if self.status is None or self.status != 0:
+            return False
+        else:
+            return True
+
     def set_data(self, data):
         self.data = data
 

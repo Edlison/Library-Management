@@ -5,15 +5,25 @@ from flask import request, jsonify, session
 from backend.filter.login_filter import need_login
 from backend.api.user.models.user_model import User
 from backend.result.system_result import SystemResult
-from backend.util.serialize import serialize_model_list
+from backend.util.serialize import serialize_model_list, serialize_model
+from backend.api.user.service.user_service import validate, info
+
+
+@user_blu.route('/register', methods=['POST'])
+def register():
+    ...
 
 
 @user_blu.route('/login', methods=['POST'])
 def login():
     user_name = request.form['user_name']
-    session['user_name'] = user_name
-    res = SystemResult().ok()
-    res.set_data(user_name)
+    user_password = request.form['user_password']
+    res = validate(user_name, user_password)
+    if res.is_ok():
+        session['user_name'] = user_name
+        res.ok('登陆成功')
+    else:
+        res.error('账号或密码错误')
     return jsonify(dict(res))
 
 
@@ -22,14 +32,10 @@ def login():
 def get_info():
     user_name = session.get('user_name')
     if user_name:
-        users = User.query.filter_by(user_name=user_name).all()
-        if users and len(users) == 1:
+        user = info(user_name)
+        if user:
             res = SystemResult().ok()
-            res.set_data(serialize_model_list(users))
-            return jsonify(dict(res))
-        else:
-            res = SystemResult().error('找到多个用户')
-            res.set_data(dict(users))
+            res.set_data(serialize_model(user))
             return jsonify(dict(res))
     else:
         res = SystemResult().error('未找到用户')

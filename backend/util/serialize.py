@@ -14,7 +14,7 @@ def serialize_model(model):
     return dict((c, getattr(model, c)) for c in columns)
 
 
-def serialize_model_list(o):
+def serialize_model_list(models):
     """
     将数组中每一个元素，生成对应字典。
     :param o: 传入的是一个对象数组.
