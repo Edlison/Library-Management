@@ -19,7 +19,7 @@
 - [用户管理子系统](./backend/api/user)
 
   |url|content|
-      |----|----|
+    |----|----|
   |/api/user/login|用户登陆|
   |/api/user/get_info|获取用户信息|
 
