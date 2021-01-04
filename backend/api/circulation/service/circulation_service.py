@@ -4,8 +4,11 @@ from backend.result.system_result import SystemResult
 from backend.api.user.mapper.user_mapper import get_user_by_name, add_user_borrowing, add_user_reser, reduce_user_borrowing, reduce_user_reser
 from backend.api.circulation.mapper.circulation_mapper import \
     get_book_by_isbn, add_borrow, add_reser, reduce_remainder, get_borrowing_books_by_user_name, get_resr_book_by_user_name, \
-    get_all_books_in_catalog, get_borrowing_by_id, renew_borrowing_by_id, delete_borrowing_by_id, increase_remainder
+    get_all_books_in_catalog, get_borrowing_by_id, renew_borrowing_by_id, delete_borrowing_by_id, increase_remainder, \
+    get_resr_by_id, delete_resr_by_id
 from backend.util.serialize import serialize_model_list, serialize_model
+from backend.util.datetime_cmp import is_dt_later
+import datetime
 
 
 def borrow_book(user_name, book_ISBN):
@@ -122,3 +125,37 @@ def return_book(user_name, borrow_id):
     return res
 
 
+def cancel_resr(user_name, reser_id):
+    book = get_resr_by_id(reser_id)
+    res = SystemResult()
+    if book:
+        delete_resr_by_id(book.reser_id)
+        increase_remainder(book.reser_book_isbn)
+        reduce_user_reser(user_name)
+        res.ok('取消预约成功')
+    else:
+        res.error('没有找到在预约的这本书')
+    return res
+
+
+def resr_to_borrow(user_name, reser_id):
+    user = get_user_by_name(user_name)
+    res = SystemResult()
+    if user:
+        if user.user_borrowing is not None and user.user_borrowing < 3:
+            book = get_resr_by_id(reser_id)  # TODO 判断预约的时间
+            now = datetime.datetime.now()
+            if is_dt_later(now, book.reser_start_time) and is_dt_later(book.reser_end_time, now):
+                delete_resr_by_id(book.reser_id)
+                reduce_user_reser(user.user_name)
+                add_borrow(user.user_name, book.reser_book_isbn)
+                add_user_borrowing(user.user_name)
+                res.ok('预约转借阅成功')
+            else:
+                cancel_resr(user_name, reser_id)
+                res.error('不再预约时间内 无法借阅 已自动取消预约')
+        else:
+            res.error('借阅已经到达上限 不能借阅')
+    else:
+        res.error('获取用户失败')
+    return res

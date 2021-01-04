@@ -150,6 +150,17 @@ def increase_remainder(book_ISBN):
     db.session.commit()
 
 
+def get_resr_by_id(reser_id):
+    reservation = Reservation.query.filter_by(reser_id=reser_id).first()
+    return reservation
+
+
+def delete_resr_by_id(reser_id):
+    reservation = Reservation.query.filter_by(reser_id=reser_id).first()
+    db.session.delete(reservation)
+    db.session.commit()
+
+
 
 
 

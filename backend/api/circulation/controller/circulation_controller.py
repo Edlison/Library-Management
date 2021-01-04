@@ -3,7 +3,8 @@
 from backend.api.circulation import cir_blu
 from backend.filter.login_filter import need_login
 from backend.api.circulation.service.circulation_service import \
-    borrow_book, reser_book, get_borrow_books, get_resr_book, get_certain_book, get_all_books, renew_book, return_book
+    borrow_book, reser_book, get_borrow_books, get_resr_book, get_certain_book, get_all_books, renew_book, return_book, \
+    cancel_resr, resr_to_borrow
 from flask import request, jsonify, session
 
 
@@ -128,7 +129,7 @@ def return_():
 
 @cir_blu.route('/canc_resr', methods=['POST'])
 @need_login
-def cancel_reservation():
+def cancel():
     """
     取消预约流程：
     用户登陆 - 删除预约表信息 - 用户预约数减1 - 库存加1 - 取消成功
@@ -140,12 +141,15 @@ def cancel_reservation():
     @Author  : Edlison
     @Date    : 1/3/21 21:55
     """
-    ...
+    user_name = session.get('user_name')
+    reser_id = request.form.get('reser_id')
+    res = cancel_resr(user_name, reser_id)
+    return jsonify(dict(res))
 
 
 @cir_blu.route('/resr2borr', methods=['POST'])
 @need_login
-def reservation_to_borrowing():
+def resr2borr():
     """
     预约改借阅：
     用户登陆 - 用户借书小于3本 - 删除预约表信息 - 用户预约数减1 - 增加借阅信息表信息 - 用户借阅数加1 - 预约改借阅成功
@@ -157,7 +161,10 @@ def reservation_to_borrowing():
     @Author  : Edlison
     @Date    : 1/3/21 22:05
     """
-    ...
+    user_name = session.get('user_name')
+    reser_id = request.form.get('reser_id')
+    res = resr_to_borrow(user_name, reser_id)
+    return jsonify(dict(res))
 
 
 @cir_blu.route('/get_book', methods=['POST'])
