@@ -38,7 +38,6 @@ def search_catalog_id(book_ISBN):
 
 def search_book_class(book_class):
     catalog_list = Catalog.query.filter(Catalog.catalog_id.like(book_class+'%')).all()
-    print(catalog_list)
     return catalog_list
 
 def search_book_state(book_ISBN):
@@ -76,8 +75,8 @@ def search_state():
     # 返回数组
     return catalog_json
 
-def update_book_num(book_state,book_num):
-    catalog = Catalog.query.filter(Catalog.book_state == book_state)
+def update_book_num(book_ISBN,book_state,book_num):
+    catalog = Catalog.query.filter(Catalog.book_ISBN == book_ISBN,Catalog.book_state == book_state).first()
     catalog.book_num = catalog.book_num+book_num
     catalog.book_remainder_num = catalog.book_remainder_num + book_num
     db.session.commit()

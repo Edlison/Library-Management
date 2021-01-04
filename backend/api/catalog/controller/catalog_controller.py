@@ -71,7 +71,7 @@ def addcatalog_one():
 def addcatalog_list():
     #获取json数组
     json_list = json.loads(request.get_data(as_text=True))
-    catalog_id_dic = {}
+    catalog_id_list = []
     #对数组中的每一个json进行处理
     for each in json_list:
         #转换成字典
@@ -83,7 +83,6 @@ def addcatalog_list():
         book_num = each.get("book_num")#数量
         book_state = each.get("book_state")#状态
         book_return_reason = each.get("book_return_reason")#退货原因
-        print(search_book_ISBN(book_ISBN))
         #是否已经存在编目
         if search_book_ISBN(book_ISBN) == []:
             #不存在编目
@@ -91,17 +90,19 @@ def addcatalog_list():
             catalog_id = create_catalog_id(book_class)
             #根据状态判断是否有退货原因
             if book_state == 1 :
+                catalog_id_list.append([{"name":book_name,"catalog":catalog_id}])
                 insert_noreturn(catalog_id,book_ISBN,book_name,book_author,book_public_company,book_state,book_num)
             if book_state == 0 :
-                catalog_id_dic.update({book_ISBN:catalog_id})
                 insert_return(catalog_id,book_ISBN,book_name,book_author,book_public_company,book_state,book_num,
                               book_return_reason)
         else:
             #判断是否都有了
             if search_book_state(book_ISBN) == [0,1]:
-                update_book_num(book_state,book_num)
+                update_book_num(book_ISBN,book_state,book_num)
                 continue
+            #与当前状态相同
             elif search_book_state(book_ISBN)[0] == book_state:
+                update_book_num(book_ISBN,book_state,book_num)
                 continue
             else:
                 catalog_id = search_catalog_id(book_ISBN)[0].catalog_id
@@ -111,9 +112,14 @@ def addcatalog_list():
                 if book_state == 0:
                     insert_return(catalog_id, book_ISBN, book_name, book_author, book_public_company, book_state,
                                   book_num, book_return_reason)
-    res = SystemResult().ok()
-    res.set_data(["编目成功",catalog_id_dic])
-    return jsonify(dict(res))
+    if catalog_id_list == [] :
+        res = SystemResult().error()
+        res.set_data("所有图书已被重复编目")
+        return jsonify(dict(res))
+    else:
+        res = SystemResult().ok()
+        res.set_data(catalog_id_list)
+        return jsonify(dict(res))
     #返回ISBN和编目号
 
 @catalog_blu.route('/catalog_search_ISBN/',methods = ['POST'])
