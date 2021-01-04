@@ -2,7 +2,8 @@
 # @Date    : 12/31/20 18:32
 from backend.api.circulation import cir_blu
 from backend.filter.login_filter import need_login
-from backend.api.circulation.service.circulation_service import borrow_book, reser_book
+from backend.api.circulation.service.circulation_service import \
+    borrow_book, reser_book, get_borrow_books, get_resr_book, get_certain_book, get_all_books, renew_book, return_book
 from flask import request, jsonify, session
 
 
@@ -50,7 +51,43 @@ def reserve():
     return jsonify(dict(res))
 
 
-@cir_blu.route('renew', methods=['POST'])
+@cir_blu.route('/get_borrow', methods=['POST'])
+@need_login
+def get_borrow():
+    """
+    获取用户借阅信息
+
+    Args:
+
+    Returns:
+
+    @Author  : Edlison
+    @Date    : 1/4/21 14:40
+    """
+    user_name = session.get('user_name')
+    res = get_borrow_books(user_name)
+    return jsonify(dict(res))
+
+
+@cir_blu.route('/get_resr', methods=['POST'])
+@need_login
+def get_resr():
+    """
+    获取用户预约信息
+
+    Args:
+
+    Returns:
+
+    @Author  : Edlison
+    @Date    : 1/4/21 14:40
+    """
+    user_name = session.get('user_name')
+    res = get_resr_book(user_name)
+    return jsonify(dict(res))
+
+
+@cir_blu.route('/renew', methods=['POST'])
 @need_login
 def renew():
     """
@@ -64,12 +101,14 @@ def renew():
     @Author  : Edlison
     @Date    : 1/3/21 22:24
     """
-    ...
+    borrow_id = request.form.get('borrow_id')
+    res = renew_book(borrow_id)
+    return jsonify(dict(res))
 
 
 @cir_blu.route('/ret_book', methods=['POST'])
 @need_login
-def return_book():
+def return_():
     """
     还书流程：
     用户登陆 - 删借阅表信息 - 用户借阅数减1 - 库存加1 - 还书成功
@@ -81,10 +120,13 @@ def return_book():
     @Author  : Edlison
     @Date    : 1/3/21 22:01
     """
-    ...
+    user_name = session.get('user_name')
+    borrow_id = request.form.get('borrow_id')
+    res = return_book(user_name, borrow_id)
+    return jsonify(dict(res))
 
 
-@cir_blu.route('canc_resr', methods=['POST'])
+@cir_blu.route('/canc_resr', methods=['POST'])
 @need_login
 def cancel_reservation():
     """
@@ -101,7 +143,7 @@ def cancel_reservation():
     ...
 
 
-@cir_blu.route('resr2borr')
+@cir_blu.route('/resr2borr', methods=['POST'])
 @need_login
 def reservation_to_borrowing():
     """
@@ -116,3 +158,38 @@ def reservation_to_borrowing():
     @Date    : 1/3/21 22:05
     """
     ...
+
+
+@cir_blu.route('/get_book', methods=['POST'])
+@need_login
+def get_book():
+    """
+    获取图书详细信息
+
+    Args:
+
+    Returns:
+
+    @Author  : Edlison
+    @Date    : 1/4/21 14:41
+    """
+    book_ISBN = request.form.get('book_ISBN')
+    res = get_certain_book(book_ISBN)
+    return jsonify(dict(res))
+
+
+@cir_blu.route('/get_all_books', methods=['POST'])
+@need_login
+def all():
+    """
+    获取馆藏信息
+
+    Args:
+
+    Returns:
+
+    @Author  : Edlison
+    @Date    : 1/4/21 14:42
+    """
+    res = get_all_books()
+    return jsonify(dict(res))

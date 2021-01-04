@@ -23,6 +23,6 @@ def serialize_model_list(models):
     :rtype: list
     """
     l = []
-    for each in o:
+    for each in models:
         l.append(serialize_model(each))
     return l

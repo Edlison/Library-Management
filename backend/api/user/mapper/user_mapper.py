@@ -27,10 +27,21 @@ def add_user_borrowing(user_name):
     user.user_borrowing += 1
     db.session.commit()
 
+def reduce_user_borrowing(user_name):
+    user = User.query.filter_by(user_name=user_name).first()
+    user.user_borrowing -= 1
+    db.session.commit()
+
 
 def add_user_reser(user_name):
     user = User.query.filter_by(user_name=user_name).first()
     user.user_reserving += 1
+    db.session.commit()
+
+
+def reduce_user_reser(user_name):
+    user = User.query.filter_by(user_name=user_name).first()
+    user.user_reserving -= 1
     db.session.commit()
 
 
