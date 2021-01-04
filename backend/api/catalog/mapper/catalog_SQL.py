@@ -32,8 +32,13 @@ def search_book_ISBN(book_ISBN):
     catalog_list = Catalog.query.filter(Catalog.book_ISBN == book_ISBN).all()
     return catalog_list
 
-def search_catalog_id(catalog_id):
-    catalog_list = Catalog.query.filter(Catalog.catalog_id == catalog_id).all()
+def search_catalog_id(book_ISBN):
+    catalog_list = Catalog.query.filter(Catalog.book_ISBN == book_ISBN).all()
+    return catalog_list
+
+def search_book_class(book_class):
+    catalog_list = Catalog.query.filter(Catalog.catalog_id.like(book_class+'%')).all()
+    print(catalog_list)
     return catalog_list
 
 def search_book_state(book_ISBN):

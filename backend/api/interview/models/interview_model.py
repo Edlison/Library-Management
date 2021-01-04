@@ -7,7 +7,7 @@ class Interview(db.Model):
     interview_id = db.Column(db.Integer, primary_key=True)
     book_ISBN = db.Column(db.String(17), nullable=True)
     book_name = db.Column(db.String(50), nullable = True)
-    book_price = db.Column(db.Integer)
+    book_price = db.Column(db.String(10),nullable = True)
     book_author = db.Column(db.String(50),nullable = True)
     book_public_company = db.Column(db.String(50),nullable = True)
     book_num = db.Column(db.Integer,nullable = True, default = 1)
@@ -27,4 +27,3 @@ class Interview(db.Model):
 
     def __getitem__(self, item):
         return getattr(self, item)
-

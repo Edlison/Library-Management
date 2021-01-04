@@ -4,7 +4,7 @@ from backend.api import db
 
 class Catalog(db.Model):
     __tablename__ = 'catalog'
-    catalog_id = db.Column(db.Integer, primary_key=True)
+    catalog_id = db.Column(db.String(10), primary_key=True)
     book_ISBN = db.Column(db.String(17), nullable=True)
     book_name = db.Column(db.String(50), nullable = True)
     book_author = db.Column(db.String(50),nullable = True)

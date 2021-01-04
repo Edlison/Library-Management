@@ -24,14 +24,15 @@ def insert(book_ISBN,book_name,book_price,book_author,book_public_company,book_n
     #已经有过推荐
     else :
         #查找推荐记录
-        book = Interview.query.filter(Interview.book_ISBN == book_ISBN)
+        book = Interview.query.filter(Interview.book_ISBN == book_ISBN).all()
         #是否为同一个人重复推荐
         flag = 1
         for each in book:
-            if each.user_id == user_id:
+            if each.user_id == int(user_id):
                 if book_num == None:
                     book_num = 0
-                each.book_num = each.book_num+book_num
+                each.book_num = each.book_num + int(book_num)
+                db.session.commit()
                 flag = 0
                 break
         if  flag :
@@ -49,13 +50,21 @@ def insert(book_ISBN,book_name,book_price,book_author,book_public_company,book_n
 
 
 def search():
+    #要汇总的
     #获得采访清单内所有的内容
     interview_list =  Interview.query.all()
     #用来存储转换成json格式的列表
     interview_jsonlist = []
-    #转换格式并存储
+    interview_ISBNlist = []
+    #转换格式并汇总存储
     for each in interview_list:
-        interview_jsonlist.append(dict(each))
+        if each.book_ISBN in interview_ISBNlist:
+            book_num = interview_jsonlist[interview_ISBNlist.index(each.book_ISBN)].get("book_num")
+            book_num = book_num + each.book_num
+            interview_jsonlist[interview_ISBNlist.index(each.book_ISBN)].update({"book_num" : book_num})
+        else:
+            interview_ISBNlist.append(each.book_ISBN)
+            interview_jsonlist.append(dict(each))
     #转换成json数组
     interview_json = json.dumps(interview_jsonlist,default=str,ensure_ascii=False)
     interview_json = json.loads(interview_json)
