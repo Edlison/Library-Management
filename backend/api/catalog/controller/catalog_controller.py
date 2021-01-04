@@ -90,7 +90,7 @@ def addcatalog_list():
             catalog_id = create_catalog_id(book_class)
             #根据状态判断是否有退货原因
             if book_state == 1 :
-                catalog_id_list.append([{"name":book_name,"catalog":catalog_id}])
+                catalog_id_list.append({"name":book_name,"catalog":catalog_id})
                 insert_noreturn(catalog_id,book_ISBN,book_name,book_author,book_public_company,book_state,book_num)
             if book_state == 0 :
                 insert_return(catalog_id,book_ISBN,book_name,book_author,book_public_company,book_state,book_num,
