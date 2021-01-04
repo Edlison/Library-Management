@@ -24,6 +24,7 @@ def validate(user_name, user_password):
     user = get_user_by_name_password(user_name, sha256(user_password.encode('utf-8')).hexdigest())
     if user:
         g.user_id = user.user_id
+        g.user_role = user.user_role
         update_user_login_time(user_name)
         res = SystemResult().ok()
     else:

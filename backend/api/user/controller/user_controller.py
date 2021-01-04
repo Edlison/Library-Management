@@ -47,6 +47,7 @@ def login():
     if res.is_ok():
         session['user_name'] = user_name
         session['user_id'] = g.user_id
+        res.set_data({'user_role': g.user_role})
         res.ok('登陆成功')
     else:
         res.error('账号或密码错误')
