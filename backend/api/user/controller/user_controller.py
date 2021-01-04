@@ -5,7 +5,7 @@ from flask import request, jsonify, session, g
 from backend.filter.login_filter import need_login
 from backend.result.system_result import SystemResult
 from backend.util.serialize import serialize_model_list, serialize_model
-from backend.api.user.service.user_service import validate, info
+from backend.api.user.service.user_service import validate, info, exceed_the_time
 from backend.api.user.mapper.user_mapper import insert_user
 
 
@@ -80,7 +80,7 @@ def get_info():
 
 @user_blu.route('/exceed_the_time', methods=['POST'])
 @need_login
-def exceed_the_time():  # TODO 超期提醒
+def exceed():  # TODO 超期提醒
     """
     超期提醒
     用last_login去比对
@@ -92,4 +92,6 @@ def exceed_the_time():  # TODO 超期提醒
     @Author  : Edlison
     @Date    : 1/3/21 21:52
     """
-    ...
+    user_name = session.get('user_name')
+    res = exceed_the_time(user_name)
+    return jsonify(dict(res))
