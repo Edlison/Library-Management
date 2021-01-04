@@ -1,7 +1,13 @@
 <template>
   <div class="login-container">
-    <el-form ref="loginForm" :model="loginForm" :rules="loginRules" class="login-form" auto-complete="on" label-position="left">
-
+    <el-form
+      ref="loginForm"
+      :model="loginForm"
+      :rules="loginRules"
+      class="login-form"
+      auto-complete="on"
+      label-position="left"
+    >
       <div class="title-container">
         <h3 class="title">图书管理系统</h3>
       </div>
@@ -37,75 +43,87 @@
           @keyup.enter.native="handleLogin"
         />
         <span class="show-pwd" @click="showPwd">
-          <svg-icon :icon-class="passwordType === 'password' ? 'eye' : 'eye-open'" />
+          <svg-icon
+            :icon-class="passwordType === 'password' ? 'eye' : 'eye-open'"
+          />
         </span>
       </el-form-item>
 
-      <el-button :loading="loading" type="primary" style="width:100%;margin-bottom:30px;" @click.native.prevent="handleLogin">登录</el-button>
+      <el-button
+        :loading="loading"
+        type="primary"
+        style="width: 100%; margin-bottom: 30px"
+        @click.native.prevent="handleSubmit"
+        >登录</el-button
+      >
 
       <!-- <div class="tips">
         <span style="margin-right:20px;">username: admin</span>
         <span> password: any</span>
       </div> -->
-
     </el-form>
   </div>
 </template>
 
 <script>
-import { validUsername } from '@/utils/validate'
+import { validUsername } from "@/utils/validate";
+import Axios from "axios";
 
 export default {
-  name: 'Login',
+  name: "Login",
   data() {
     const validateUsername = (rule, value, callback) => {
       if (!validUsername(value)) {
-        callback(new Error('Please enter the correct user name'))
+        callback(new Error("Please enter the correct user name"));
       } else {
-        callback()
+        callback();
       }
-    }
+    };
     const validatePassword = (rule, value, callback) => {
       if (value.length < 6) {
-        callback(new Error('The password can not be less than 6 digits'))
+        callback(new Error("The password can not be less than 6 digits"));
       } else {
-        callback()
+        callback();
       }
-    }
+    };
     return {
       loginForm: {
-        username: 'admin',
-        password: '111111'
+        username: "admin",
+        password: "123123",
       },
       loginRules: {
-        username: [{ required: true, trigger: 'blur', validator: validateUsername }],
-        password: [{ required: true, trigger: 'blur', validator: validatePassword }]
+        username: [
+          { required: true, trigger: "blur"},
+        ],
+        password: [
+          { required: true, trigger: "blur" },
+        ],
       },
       loading: false,
-      passwordType: 'password',
-      redirect: undefined
-    }
+      passwordType: "password",
+      redirect: undefined,
+    };
   },
   watch: {
     $route: {
-      handler: function(route) {
-        this.redirect = route.query && route.query.redirect
+      handler: function (route) {
+        this.redirect = route.query && route.query.redirect;
       },
-      immediate: true
-    }
+      immediate: true,
+    },
   },
   methods: {
     showPwd() {
-      if (this.passwordType === 'password') {
-        this.passwordType = ''
+      if (this.passwordType === "password") {
+        this.passwordType = "";
       } else {
-        this.passwordType = 'password'
+        this.passwordType = "password";
       }
       this.$nextTick(() => {
-        this.$refs.password.focus()
-      })
+        this.$refs.password.focus();
+      });
     },
-    handleLogin() {
+        handleSubmit() {
       this.$refs.loginForm.validate(valid => {
         if (valid) {
           this.loading = true
@@ -119,18 +137,104 @@ export default {
           console.log('error submit!!')
           return false
         }
+      })},
+    handleLogin() {
+      this.$refs.loginForm.validate(valid => {
+        if (valid&&1) {
+          this.loading = true;
+          //调用user模块红的login
+          console.log("点击登陆按钮")
+          this.$store.dispatch('user/login', this.loginForm).then(() => {
+            console.log("登录成功");
+            this.$router.push({ path: this.redirect || '/' });
+            this.loading = false;
+          }).catch(() => {
+            this.loading = false;
+          })
+        } else {
+          console.log('error submit!!');
+          return false;
+        }
       })
     }
-  }
-}
+    // handleSubmit() {
+    //   this.$refs.loginForm.validate((valid) => {
+    //     if (valid) {
+    //       this.loading = true;
+    //       var loginparams = {
+    //         user_name: this.loginForm.username,
+    //         user_password: this.loginForm.password,
+    //       };
+    //       let formData = new FormData();
+    //       formData.append('user_name',this.loginForm.username);
+    //       formData.append('user_password', this.loginForm.password);
+    //       Axios({
+    //         method: "post",
+    //         url: "/api/user/login",
+    //         data: formData
+    //       }).then((res) => {
+    //         console.log(111);
+    //         console.log(res);
+    //         this.logining = false;
+    //         let { msg,  data } = res.data;
+    //         console.log(data);
+    //         // return ;
+    //         if (res.status !== 200) {
+    //           this.$message({
+    //             message: msg,
+    //             type: "error",
+    //           });
+    //         } else {
+    //           // console.log(user)
+    //           if (data.user_role == 0) {
+    //             // sessionStorage.setItem("user", JSON.stringify(user));
+    //             // commit('SET_TOKEN', res.token);
+    //             let allCookies = document.cookie
+    //             sessionStorage.setItem("user", JSON.stringify(allCookies));
+    //             console.log(allCookies,11)
+    //             console.log("yes")
+    //             // this.$router.push({ path: this.redirect || '/' });
+    //             // this.$router.push({ path: "/" });
+    //           } else if (user.type === "advert") {
+    //             // sessionStorage.setItem("user", JSON.stringify(user));
+    //             // this.$router.push({ path: "/table" });
+    //           }
+    //         }
+    //       });
+    //     } else {
+    //       console.log("error submit!!");
+    //       return false;
+    //     }
+    //   });
+    // },
+  },
+};
+//     handleLogin() {
+//       this.$refs.loginForm.validate(valid => {
+//         if (valid) {
+//           this.loading = true
+//           this.$store.dispatch('user/login', this.loginForm).then(() => {
+//             this.$router.push({ path: this.redirect || '/' })
+//             this.loading = false
+//           }).catch(() => {
+//             this.loading = false
+//           })
+//         } else {
+//           console.log('error submit!!')
+//           return false
+//         }
+//       })
+//     }
+//   }
+// }
 </script>
 
 <style lang="scss">
 /* 修复input 背景不协调 和光标变色 */
 /* Detail see https://github.com/PanJiaChen/vue-element-admin/pull/927 */
 
-$bg:#283443;
-$light_gray:#fff;
+$bg: #283443;
+$light_gray: #fff;
 $cursor: #fff;
 
 @supports (-webkit-mask: none) and (not (cater-color: $cursor)) {
@@ -173,9 +277,9 @@ $cursor: #fff;
 </style>
 
 <style lang="scss" scoped>
-$bg:#2d3a4b;
-$dark_gray:#889aa4;
-$light_gray:#eee;
+$bg: #2d3a4b;
+$dark_gray: #889aa4;
+$light_gray: #eee;
 
 .login-container {
   min-height: 100%;
@@ -235,3 +339,5 @@ $light_gray:#eee;
   }
 }
 </style>
+
+

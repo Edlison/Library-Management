@@ -11,7 +11,7 @@ export default {
   name: 'Dashboard',
   computed: {
     ...mapGetters([
-      'name'
+      'user_name'
     ])
   }
 }

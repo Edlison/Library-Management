@@ -30,12 +30,21 @@ const mutations = {
 const actions = {
   // user login
   login({ commit }, userInfo) {
+    console.log("登录测试1")
+    console.log(userInfo,"userinfo");
     const { username, password } = userInfo
     return new Promise((resolve, reject) => {
-      login({ username: username.trim(), password: password }).then(response => {
+        let formData = new FormData();
+        formData.append('user_name',username);
+        formData.append('user_password',password);
+      // login({ user_name: username.trim(), user_password: password }).then(response => {
+        login(formData).then(response => {
+        console.log(111);
+        console.log(response,"xiangying")
         const { data } = response
-        commit('SET_TOKEN', data.token)
-        setToken(data.token)
+        console.log(data,"dataces");
+        commit('SET_TOKEN', data.user_role)
+        setToken(data.user_role)
         resolve()
       }).catch(error => {
         reject(error)
@@ -45,17 +54,19 @@ const actions = {
 
   // get user info
   getInfo({ commit, state }) {
+
     return new Promise((resolve, reject) => {
       getInfo(state.token).then(response => {
         const { data } = response
-
+        console.log(response,"res测试11")
         if (!data) {
+          // console.log(response,"res测试")
           return reject('Verification failed, please Login again.')
         }
 
-        const { name, avatar } = data
-
-        commit('SET_NAME', name)
+        const { user_name, avatar } = data
+        console.log(user_name)
+        commit('SET_NAME', user_name)
         commit('SET_AVATAR', avatar)
         resolve(data)
       }).catch(error => {

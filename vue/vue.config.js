@@ -38,7 +38,7 @@ module.exports = {
     },
     proxy: {
       [process.env.VUE_APP_BASE_API]:{
-        target:'http://localhost:3000',
+        target:'http://119.23.107.61:12000',
         changerOrigin:true,
         pathRewrite:{
         ['^'+process.env.VUE_APP_BASE_API]: ''

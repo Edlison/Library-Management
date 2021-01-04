@@ -51,111 +51,128 @@ export const constantRoutes = [
       path: 'dashboard',
       name: 'Dashboard',
       component: () => import('@/views/dashboard/index'),
-      meta: { title: '图书管理系统', icon: 'el-icon-s-help' }
+      meta: { title: '图书管理系统', icon: 'library' }
     }]
   },
 
   {
-    path: '/book',
+    path: '/reader',
     component: Layout,
-    redirect: '/test/book',
+    redirect: '/reader',
+    name: 'reader',
+    meta: { title: '读者系统', icon: 'reader' },
     children: [
       {
         path: 'book',
         name: 'book',
-        component: () => import('@/views/test/book'),
-        meta: { title: '馆藏展示', icon: 'table' }
-      }
-    ]
-  },
-  {
-    path: '/addBook',
-    component: Layout,
-    redirect: '/test/addBook',
-    children: [
+        component: () => import('@/views/reader/book'),
+        meta: { title: '馆藏展示', icon: 'book' }
+      },
       {
-        path: 'addBook',
-        name: 'addBook',
-        component: () => import('@/views/test/addBook'),
-        meta: { title: '新增图书', icon: 'nested' }
-      }
-    ]
-  },
-  {
-    path: '/deleteBook',
-    component: Layout,
-    redirect: '/test/deleteBook',
-    children: [
+        path: 'interview',
+        name: 'interview',
+        component: () => import('@/views/reader/interview/index'),
+        meta: { title: '采访', icon: 'interview1' }
+      },
       {
-        path: 'deleteBook',
-        name: 'deleteBook',
-        component: () => import('@/views/test/deleteBook'),
-        meta: { title: '删除图书', icon: 'nested' }
+        path: 'appointment',
+        name: 'appointment',
+        component: () => import('@/views/reader/order'),
+        meta: { title: '预约记录', icon: 'order' }
+      },
+      {
+        path: 'userRecord',
+        name: 'userRecord',
+        component: () => import('@/views/reader/userRecord'),
+        meta: { title: '借阅记录', icon: 'borrow' }
+      },
+      {
+        path: 'overdue',
+        name: 'overdue',
+        component: () => import('@/views/reader/overdue'),
+        meta: { title: '超期通报', icon: 'overdue' }
       }
     ]
   },
+
   {
-    path: '/borrow',
+    path: '/circulate',
     component: Layout,
-    redirect: '/test/borrow',
+    redirect: '/circulate',
+    name: 'circulate',
+    meta: { title: '流通管理系统', icon: 'circulate' },
     children: [
       {
         path: 'borrow',
         name: 'borrow',
-        component: () => import('@/views/test/borrow'),
-        meta: { title: '借书', icon: 'form' }
-      }
-    ]
-  },
-  {
-    path: '/breturn',
-    component: Layout,
-    redirect: '/test/breturn',
-    children: [
+        component: () => import('@/views/cirManage/borrowBook'),
+        meta: { title: '单次借书', icon: 'borrow' }
+      },
       {
-        path: 'breturn',
-        name: 'breturn',
-        component: () => import('@/views/test/breturn'),
-        meta: { title: '还书', icon: 'link' }
-      }
-    ]
-  },
-  {
-    path: '/interview',
-    component: Layout,
-    redirect: '/interview/index',
-    children: [
-      {
-        path: 'interview',
-        name: 'interview',
-        component: () => import('@/views/interview/index'),
-        meta: { title: '采访', icon: 'link' }
+        path: 'b_return',
+        name: 'b_return',
+        component: () => import('@/views/cirManage/borrow_return'),
+        meta: { title: '借还管理', icon: 'return' }
       }
     ]
   },
   {
     path: '/catalogue',
     component: Layout,
-    redirect: '/catalogue/index',
+    redirect: '/catalogue',
+    name: 'catalogue',
+    meta: { title: '编目管理系统', icon: 'el-icon-s-help' },
     children: [
       {
-        path: 'catalogue',
-        name: 'catalogue',
+        path: 'intResult',
+        name: 'intResult',
+        component: () => import('@/views/catalogue/interviewResult'),
+        meta: { title: '采访清单', icon: 'nested' }
+      },
+      {
+        path: 'addBook',
+        name: 'addBook',
+        component: () => import('@/views/catalogue/addBook'),
+        meta: { title: '新增图书', icon: 'nested' }
+      },
+      {
+        path: 'deleteBook',
+        name: 'deleteBook',
+        component: () => import('@/views/catalogue/deleteBook'),
+        meta: { title: '删除图书', icon: 'nested' }
+      },
+      {
+        path: 'catalogueBook',
+        name: 'catalogueBook',
         component: () => import('@/views/catalogue/index'),
-        meta: { title: '编目', icon: 'link' }
+        meta: { title: '到馆图书处理', icon: 'link' }
+      },
+      {
+        path: 'cataResult',
+        name: 'cataResult',
+        component: () => import('@/views/catalogue/cataResult'),
+        meta: { title: '编目结果', icon: 'link' }
+      },
+      {
+        path: 'returnResult',
+        name: 'returnResult',
+        component: () => import('@/views/catalogue/returnResult'),
+        meta: { title: '退货清单', icon: 'link' }
       }
     ]
   },
   {
-    path: '/up',
+    path: '/userSystem',
     component: Layout,
-    redirect: '/excel/up',
+    redirect: '/userSystem',
+    name: 'userSystem',
+    meta: { title: '用户管理系统', icon: 'user1' },
     children: [
       {
-        path: 'catalogue',
-        name: 'catalogue',
-        component: () => import('@/views/excel/upload-excel.vue'),
-        meta: { title: '编目', icon: 'link' }
+        path: 'user',
+        name: 'user',
+        component: () => import('@/views/user/userManagement'),
+        meta: { title: '用户管理', icon: 'user' }
       }
     ]
   },
@@ -281,5 +298,30 @@ export function resetRouter() {
   const newRouter = createRouter()
   router.matcher = newRouter.matcher // reset router
 }
+
+// export const asyncRouterMap = [
+//   {
+//     path: '/permission',
+//     component: Layout,
+//     name: 'permission',
+//     redirect: '/permission/index222',
+//     meta: {title:'permission', role: ['admin','super_editor'] }, //页面需要的权限
+//     children: [
+//       { 
+//         path: 'index222',
+//         component: () => import('@/views/test/book'),
+//         name: 'index222',
+//         meta: {title:'权限测试1',role: [0,'super_editor'] }  //页面需要的权限
+//       },
+//       { 
+//         path: 'index333',
+//         component: () => import('@/views/test/addBook'),
+//         name: 'index333',
+//         meta: {title:'权限测试2',role: [0,'super_editor'] }  //页面需要的权限
+//       }
+//     ]
+//   },
+//   { path: '*', redirect: '/404', hidden: true }
+// ];
 
 export default router
