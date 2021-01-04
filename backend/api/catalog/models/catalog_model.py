@@ -10,6 +10,7 @@ class Catalog(db.Model):
     book_author = db.Column(db.String(50),nullable = True)
     book_public_company = db.Column(db.String(50),nullable = True)
     book_num = db.Column(db.Integer,nullable = True, default = 1)
+    book_left = db.Column(db.Integer, nullable=True, default=1)
     book_remainder_num = db.Column(db.Integer,nullable = True)
     book_state = db.Column(db.Integer,nullable = True)
     book_catalog_time = db.Column(db.DateTime, default=datetime.now)

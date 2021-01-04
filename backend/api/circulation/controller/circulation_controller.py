@@ -3,13 +3,12 @@
 from backend.api.circulation import cir_blu
 from backend.filter.login_filter import need_login
 from backend.api.circulation.service.circulation_service import borrow_book
-from flask import request
-# TODO 写接口和文档
+from flask import request, jsonify
 
 
 @cir_blu.route('/borrow', methods=['POST'])
 @need_login
-def borrow():
+def borrow():  # TODO 完善borrow 1. catlog表（isbn主键 图书余量字段） 2. 添加借阅信息的datetime
     """
     借书流程：
     用户登陆 - 用户借书小于3本 - 库存大于1 - 库存减1 - 借阅表写入 - 用户借书数加1 - 借书成功
@@ -26,7 +25,7 @@ def borrow():
     user_name = request.form.get('user_name')
     book_ISBN = request.form.get('book_ISBN')
     res = borrow_book(user_name, book_ISBN)
-
+    return jsonify(dict(res))
 
 
 @cir_blu.route('/reserve', methods=['POST'])

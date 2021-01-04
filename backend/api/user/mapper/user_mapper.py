@@ -11,7 +11,7 @@ def get_user_by_name_password(user_name, user_password):
     return user
 
 
-def update_user(user_name):
+def update_user_login_time(user_name):
     p = User.query.filter(User.user_name==user_name).update({'user_last_login_time': datetime.datetime.now().timestamp()})
     db.session.commit()
 
@@ -19,3 +19,9 @@ def update_user(user_name):
 def get_user_by_name(user_name):
     user = User.query.filter_by(user_name=user_name).first()
     return user
+
+
+def update_user_borrowing(user_name):
+    user = User.query.filter_by(user_name=user_name).first()
+    user.user_borrowing += 1
+    db.session.commit()
