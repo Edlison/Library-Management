@@ -2,8 +2,8 @@
 # @Date    : 12/31/20 18:32
 from backend.api.circulation import cir_blu
 from backend.filter.login_filter import need_login
-from backend.api.circulation.service.circulation_service import borrow_book
-from flask import request, jsonify
+from backend.api.circulation.service.circulation_service import borrow_book, reser_book
+from flask import request, jsonify, session
 
 
 @cir_blu.route('/borrow', methods=['POST'])
@@ -13,7 +13,7 @@ def borrow():  # TODO 完善borrow 1. catlog表（isbn主键 图书余量字段�
     借书流程：
     用户登陆 - 用户借书小于3本 - 库存大于1 - 库存减1 - 借阅表写入 - 用户借书数加1 - 借书成功
     Tips:
-    默认借三个月
+    默认借3个月
 
     Args:
 
@@ -22,7 +22,7 @@ def borrow():  # TODO 完善borrow 1. catlog表（isbn主键 图书余量字段�
     @Author  : Edlison
     @Date    : 1/3/21 21:55
     """
-    user_name = request.form.get('user_name')
+    user_name = session.get('user_name')
     book_ISBN = request.form.get('book_ISBN')
     res = borrow_book(user_name, book_ISBN)
     return jsonify(dict(res))
@@ -34,6 +34,8 @@ def reserve():
     """
     预约流程：
     用户登陆 - 用户预约数小于1 - 库存大于1 - 库存减1 - 预约表写入 - 用户预约数加1 - 预约成功
+    Tips:
+    默认预约3个月
 
     Args:
 
@@ -42,7 +44,10 @@ def reserve():
     @Author  : Edlison
     @Date    : 1/3/21 21:55
     """
-    ...
+    user_name = session.get('user_name')
+    book_ISBN = request.form.get('book_ISBN')
+    res = reser_book(user_name, book_ISBN)
+    return jsonify(dict(res))
 
 
 @cir_blu.route('renew', methods=['POST'])
@@ -67,7 +72,7 @@ def renew():
 def return_book():
     """
     还书流程：
-    用户登陆 - 删借阅表信息 - 用户借阅数减1 - 还书成功
+    用户登陆 - 删借阅表信息 - 用户借阅数减1 - 库存加1 - 还书成功
 
     Args:
 
@@ -84,7 +89,7 @@ def return_book():
 def cancel_reservation():
     """
     取消预约流程：
-    用户登陆 - 删除预约表信息 - 用户预约数减1 - 取消成功
+    用户登陆 - 删除预约表信息 - 用户预约数减1 - 库存加1 - 取消成功
 
     Args:
 

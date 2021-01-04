@@ -36,8 +36,5 @@ def showinterviews():
 
 @interview_blu.route('/create/',methods = ['GET'])
 def create():
-    try:
-        db.create_all()
-        return "chenggong"
-    except :
-        return "shibai"
+    db.create_all()
+    return 'ok'

@@ -6,11 +6,15 @@ from backend.filter.login_filter import need_login
 from backend.result.system_result import SystemResult
 from backend.util.serialize import serialize_model_list, serialize_model
 from backend.api.user.service.user_service import validate, info
+from backend.api.user.mapper.user_mapper import insert_user
 
 
 @user_blu.route('/register', methods=['POST'])
 def register():
-    ...
+    user_name = request.form.get('user_name')
+    user_password = request.form.get('user_password')
+    insert_user(user_name, user_password)
+    return 'ok'
 
 
 @user_blu.route('/login', methods=['POST'])
