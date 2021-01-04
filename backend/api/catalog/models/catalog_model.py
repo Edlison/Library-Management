@@ -4,7 +4,7 @@ from backend.api import db
 
 class Catalog(db.Model):
     __tablename__ = 'catalog'
-    catalog_id = db.Column(db.Integer, primary_key=True)
+    catalog_id = db.Column(db.String(10), primary_key=True)
     book_ISBN = db.Column(db.String(17), nullable=True)
     book_name = db.Column(db.String(50), nullable = True)
     book_author = db.Column(db.String(50),nullable = True)
@@ -13,7 +13,7 @@ class Catalog(db.Model):
     book_remainder_num = db.Column(db.Integer,nullable = True)
     book_state = db.Column(db.Integer,nullable = True)
     book_catalog_time = db.Column(db.DateTime, default=datetime.now)
-    book_return_reason = db.Column(db.String(50))
+    book_return_reason = db.Column(db.String(200))
 
     def keys(self):
         return ['catalog_id',
