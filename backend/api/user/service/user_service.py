@@ -7,6 +7,16 @@ from flask import g
 
 
 def validate(user_name, user_password):
+    """
+    密码验证逻辑
+
+    Args:
+
+    Returns:
+
+    @Author  : Edlison
+    @Date    : 1/4/21 16:59
+    """
     user = get_user_by_name_password(user_name, sha256(user_password.encode('utf-8')).hexdigest())
     if user:
         g.user_id = user.user_id
@@ -18,6 +28,16 @@ def validate(user_name, user_password):
 
 
 def info(user_name):
+    """
+    获取用户信息
+
+    Args:
+
+    Returns:
+
+    @Author  : Edlison
+    @Date    : 1/4/21 17:00
+    """
     user = get_user_by_name(user_name)
     return user
 

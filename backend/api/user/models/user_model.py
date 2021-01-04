@@ -15,10 +15,11 @@ class User(db.Model):
     user_create_time = db.Column(db.DateTime, nullable=True, comment='用户创建时间')
     user_last_login_time = db.Column(db.DateTime, nullable=True, comment='用户上次登陆时间')
 
-    def __init__(self, user_name, user_password, user_role):
+    def __init__(self, user_name, user_password, user_role, create_time):
         self.user_name = user_name
         self.user_password = user_password
         self.user_role = user_role
+        self.user_create_time = create_time
 
     def keys(self):
         return ['user_name', 'user_role', 'user_borrowing', 'user_reserving', 'user_credit', 'user_last_login_time']

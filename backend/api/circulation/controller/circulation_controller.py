@@ -10,7 +10,7 @@ from flask import request, jsonify, session
 
 @cir_blu.route('/borrow', methods=['POST'])
 @need_login
-def borrow():  # TODO 完善borrow 1. catlog表（isbn主键 图书余量字段） 2. 添加借阅信息的datetime
+def borrow():
     """
     借书流程：
     用户登陆 - 用户借书小于3本 - 库存大于1 - 库存减1 - 借阅表写入 - 用户借书数加1 - 借书成功

@@ -108,16 +108,46 @@ def get_resr_book_by_user_name(user_name):
 
 
 def get_all_books_in_catalog():
+    """
+    获取所有图书
+
+    Args:
+
+    Returns:
+
+    @Author  : Edlison
+    @Date    : 1/4/21 16:56
+    """
     books = Catalog.query.all()
     return books
 
 
 def get_borrowing_by_id(borrow_id):
+    """
+    通过id获取借阅图书信息
+
+    Args:
+
+    Returns:
+
+    @Author  : Edlison
+    @Date    : 1/4/21 16:56
+    """
     borrowing = Borrowing.query.filter_by(borrow_id=borrow_id).first()
     return borrowing
 
 
 def renew_borrowing_by_id(borrow_id):
+    """
+    通过id续借图书 默认续借1个月
+
+    Args:
+
+    Returns:
+
+    @Author  : Edlison
+    @Date    : 1/4/21 16:57
+    """
     borrowing = Borrowing.query.filter_by(borrow_id=borrow_id).first()
     # 续借机会减1
     borrowing.borrow_renew_left -= 1
@@ -129,6 +159,16 @@ def renew_borrowing_by_id(borrow_id):
 
 
 def delete_borrowing_by_id(borrow_id):
+    """
+    通过id删除借阅信息
+
+    Args:
+
+    Returns:
+
+    @Author  : Edlison
+    @Date    : 1/4/21 16:57
+    """
     borrowing = Borrowing.query.filter_by(borrow_id=borrow_id).first()
     db.session.delete(borrowing)
     db.session.commit()
@@ -151,17 +191,31 @@ def increase_remainder(book_ISBN):
 
 
 def get_resr_by_id(reser_id):
+    """
+    通过id获取预约信息
+
+    Args:
+
+    Returns:
+
+    @Author  : Edlison
+    @Date    : 1/4/21 16:58
+    """
     reservation = Reservation.query.filter_by(reser_id=reser_id).first()
     return reservation
 
 
 def delete_resr_by_id(reser_id):
+    """
+    通过id删除预约信息
+
+    Args:
+
+    Returns:
+
+    @Author  : Edlison
+    @Date    : 1/4/21 16:58
+    """
     reservation = Reservation.query.filter_by(reser_id=reser_id).first()
     db.session.delete(reservation)
     db.session.commit()
-
-
-
-
-
-

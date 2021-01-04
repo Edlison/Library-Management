@@ -3,9 +3,11 @@ from backend.api import db
 from backend.api.interview.mapper.interview_SQL import insert,search
 from backend.api.interview import interview_blu
 from backend.result.system_result import SystemResult
+from backend.filter.login_filter import need_login
 
 
-@interview_blu.route('/addinterviews/',methods = ['POST'])
+@interview_blu.route('/addinterviews',methods = ['POST'])
+@need_login
 def addinterviews():
     #获取信息
     book_ISBN = request.form['book_ISBN']
@@ -25,7 +27,8 @@ def addinterviews():
         return jsonify(dict(res))
 
 
-@interview_blu.route('/showinterviews/',methods = ['GET'])
+@interview_blu.route('/showinterviews',methods = ['GET'])
+@need_login
 def showinterviews():
     #获得数组
     interview_search = search()
@@ -34,7 +37,9 @@ def showinterviews():
     res.set_data(interview_search)
     return jsonify(dict(res))
 
-@interview_blu.route('/create/',methods = ['GET'])
+
+@interview_blu.route('/create',methods = ['GET'])
+@need_login
 def create():
     db.create_all()
     return 'ok'

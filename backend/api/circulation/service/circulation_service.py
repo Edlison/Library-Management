@@ -12,12 +12,22 @@ import datetime
 
 
 def borrow_book(user_name, book_ISBN):
+    """
+    借书流程
+    
+    Args:
+    
+    Returns:
+    
+    @Author  : Edlison
+    @Date    : 1/4/21 16:53
+    """
     user = get_user_by_name(user_name)
     book = get_book_by_isbn(book_ISBN)
     res = SystemResult()
     if user:
         if user.user_borrowing is not None and user.user_borrowing < 3:  # 用户借阅数小于3
-            if book.book_remainder_num is not None and book.book_remainder_num > 1:  # 图书库存大于1 TODO catalog表中余量
+            if book.book_remainder_num is not None and book.book_remainder_num > 1:  # 图书库存大于1
                 reduce_remainder(book_ISBN)
                 add_borrow(user_name, book_ISBN)
                 add_user_borrowing(user_name)
@@ -32,6 +42,16 @@ def borrow_book(user_name, book_ISBN):
 
 
 def reser_book(user_name, book_ISBN):
+    """
+    预约流程
+
+    Args:
+
+    Returns:
+
+    @Author  : Edlison
+    @Date    : 1/4/21 16:54
+    """
     user = get_user_by_name(user_name)
     book = get_book_by_isbn(book_ISBN)
     res = SystemResult()
@@ -52,6 +72,16 @@ def reser_book(user_name, book_ISBN):
 
 
 def get_borrow_books(user_name):
+    """
+    获取用户的在借书籍信息
+
+    Args:
+
+    Returns:
+
+    @Author  : Edlison
+    @Date    : 1/4/21 16:54
+    """
     books = get_borrowing_books_by_user_name(user_name)
     res = SystemResult()
     books = serialize_model_list(books)
@@ -66,6 +96,16 @@ def get_borrow_books(user_name):
 
 
 def get_resr_book(user_name):
+    """
+    获取用户的在预约书籍信息
+
+    Args:
+
+    Returns:
+
+    @Author  : Edlison
+    @Date    : 1/4/21 16:54
+    """
     book = get_resr_book_by_user_name(user_name)
     res = SystemResult()
     if book:
@@ -77,6 +117,16 @@ def get_resr_book(user_name):
 
 
 def get_certain_book(book_ISBN):
+    """
+    获取某本书的详细信息
+
+    Args:
+
+    Returns:
+
+    @Author  : Edlison
+    @Date    : 1/4/21 16:55
+    """
     book = get_book_by_isbn(book_ISBN)
     res = SystemResult()
     if book:
@@ -88,6 +138,16 @@ def get_certain_book(book_ISBN):
 
 
 def get_all_books():
+    """
+    获取全部馆藏书籍信息
+
+    Args:
+
+    Returns:
+
+    @Author  : Edlison
+    @Date    : 1/4/21 16:55
+    """
     books = get_all_books_in_catalog()
     res = SystemResult()
     if books:
@@ -99,6 +159,16 @@ def get_all_books():
 
 
 def renew_book(borrow_id):
+    """
+    续借图书 默认1个月
+
+    Args:
+
+    Returns:
+
+    @Author  : Edlison
+    @Date    : 1/4/21 16:55
+    """
     book = get_borrowing_by_id(borrow_id)
     res = SystemResult()
     if book:
@@ -113,6 +183,16 @@ def renew_book(borrow_id):
 
 
 def return_book(user_name, borrow_id):
+    """
+    还书
+
+    Args:
+
+    Returns:
+
+    @Author  : Edlison
+    @Date    : 1/4/21 16:55
+    """
     book = get_borrowing_by_id(borrow_id)
     res = SystemResult()
     if book:
@@ -126,6 +206,16 @@ def return_book(user_name, borrow_id):
 
 
 def cancel_resr(user_name, reser_id):
+    """
+    取消预约
+
+    Args:
+
+    Returns:
+
+    @Author  : Edlison
+    @Date    : 1/4/21 16:55
+    """
     book = get_resr_by_id(reser_id)
     res = SystemResult()
     if book:
@@ -139,11 +229,21 @@ def cancel_resr(user_name, reser_id):
 
 
 def resr_to_borrow(user_name, reser_id):
+    """
+    预约图书转为在借图书
+
+    Args:
+
+    Returns:
+
+    @Author  : Edlison
+    @Date    : 1/4/21 16:56
+    """
     user = get_user_by_name(user_name)
     res = SystemResult()
     if user:
         if user.user_borrowing is not None and user.user_borrowing < 3:
-            book = get_resr_by_id(reser_id)  # TODO 判断预约的时间
+            book = get_resr_by_id(reser_id)
             now = datetime.datetime.now()
             if is_dt_later(now, book.reser_start_time) and is_dt_later(book.reser_end_time, now):
                 delete_resr_by_id(book.reser_id)

@@ -10,7 +10,19 @@ from backend.api.user.mapper.user_mapper import insert_user
 
 
 @user_blu.route('/register', methods=['POST'])
+@need_login
 def register():
+    """
+    关闭
+    注册接口 默认用户角色为0
+
+    Args:
+
+    Returns:
+
+    @Author  : Edlison
+    @Date    : 1/4/21 16:59
+    """
     user_name = request.form.get('user_name')
     user_password = request.form.get('user_password')
     insert_user(user_name, user_password)

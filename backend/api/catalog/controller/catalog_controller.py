@@ -5,9 +5,11 @@ from backend.api.catalog.mapper.catalog_SQL import search_book_ISBN,search_catal
 from backend.api.catalog.mapper.catalog_SQL import update_book_num
 from backend.api.catalog import catalog_blu
 from backend.result.system_result import SystemResult
+from backend.filter.login_filter import need_login
 
 
-@catalog_blu.route('/addcatalog_one/',methods = ['POST'])
+@catalog_blu.route('/addcatalog_one',methods = ['POST'])
+@need_login
 def addcatalog_one():
     catalog_id = request.form['catalog_id']
     book_ISBN = request.form['book_ISBN']
@@ -65,7 +67,9 @@ def addcatalog_one():
         res.set_data("编目成功")
         return jsonify(dict(res))
 
-@catalog_blu.route('/addcatalog_list/',methods = ['POST'])
+
+@catalog_blu.route('/addcatalog_list',methods = ['POST'])
+@need_login
 def addcatalog_list():
     #获取json数组
     json_list = request.get_json()
@@ -115,7 +119,9 @@ def addcatalog_list():
     res.set_data("编目成功")
     return jsonify(dict(res))
 
-@catalog_blu.route('/catalog_search_ISBN/',methods = ['POST'])
+
+@catalog_blu.route('/catalog_search_ISBN',methods = ['POST'])
+@need_login
 def catalog_searh():
     book_ISBN = request.form['book_ISBN']
     # 获得数组
@@ -134,7 +140,9 @@ def catalog_searh():
     res.set_data(catalog_json)
     return jsonify(dict(res))
 
-@catalog_blu.route('/showcatalog/',methods = ['GET'])
+
+@catalog_blu.route('/showcatalog',methods = ['GET'])
+@need_login
 def showcatalog():
     #获得数组
     catalog_search = search_all()
@@ -144,7 +152,9 @@ def showcatalog():
     res.set_data(catalog_search)
     return jsonify(dict(res))
 
-@catalog_blu.route('/show_return_catalog/',methods = ['GET'])
+
+@catalog_blu.route('/show_return_catalog',methods = ['GET'])
+@need_login
 def show_return_catalog():
     #获得数组
     catalog_search = search_state()
@@ -152,5 +162,3 @@ def show_return_catalog():
     res = SystemResult().ok()
     res.set_data(catalog_search)
     return jsonify(dict(res))
-
-
