@@ -1,52 +1,98 @@
 # @Author  : Edlison
 # @Date    : 12/28/20 18:10
 from backend.api.user import user_blu
-from flask import request, jsonify, session, make_response
-import json
-from backend.api import db
-from backend.api.user.models.user_model import User
+from flask import request, jsonify, session, g
+from backend.filter.login_filter import need_login
 from backend.result.system_result import SystemResult
+from backend.util.serialize import serialize_model_list, serialize_model
+from backend.api.user.service.user_service import validate, info, exceed_the_time
+from backend.api.user.mapper.user_mapper import insert_user
 
 
-@user_blu.route('/edlison', methods=['GET'])
-def user_home():
-    print('request success')
-    return 'hello'
+@user_blu.route('/register', methods=['POST'])
+@need_login
+def register():
+    """
+    关闭
+    注册接口 默认用户角色为0
+
+    Args:
+
+    Returns:
+
+    @Author  : Edlison
+    @Date    : 1/4/21 16:59
+    """
+    user_name = request.form.get('user_name')
+    user_password = request.form.get('user_password')
+    insert_user(user_name, user_password)
+    return 'ok'
 
 
 @user_blu.route('/login', methods=['POST'])
 def login():
-    data = request.get_data()
-    print('data1:',data)
-    data = json.loads(data)
-    data = data['data']
-    session['username']=data['username']
-    print(session.get('username'))
-    return jsonify(data)
+    """
+    用户登陆
+
+    Args:
+
+    Returns:
+
+    @Author  : Edlison
+    @Date    : 1/3/21 21:51
+    """
+    user_name = request.form['user_name']
+    user_password = request.form['user_password']
+    res = validate(user_name, user_password)
+    if res.is_ok():
+        session['user_name'] = user_name
+        session['user_id'] = g.user_id
+        res.set_data({'user_role': g.user_role})
+        res.ok('登陆成功')
+    else:
+        res.error('账号或密码错误')
+    return jsonify(dict(res))
 
 
-@user_blu.route('/create', methods=['POST'])
-def create():
-    db.create_all()
-    return make_response('ok')
+@user_blu.route('/get_info', methods=['POST'])
+@need_login
+def get_info():
+    """
+    获取用户信息
+
+    Args:
+
+    Returns:
+
+    @Author  : Edlison
+    @Date    : 1/3/21 21:52
+    """
+    user_name = session.get('user_name')
+    if user_name:
+        user = info(user_name)
+        if user:
+            res = SystemResult().ok()
+            res.set_data(serialize_model(user))
+            return jsonify(dict(res))
+    else:
+        res = SystemResult().error('未找到用户')
+        return jsonify(dict(res))
 
 
-@user_blu.route('/insert', methods=['POST'])
-def insert():
-    admin = User('admin', 'admin123')
-    edlison = User('edlison', 'qwer1234!')
-    admin.set_role(1)
-    edlison.set_role(2)
-    db.session.add(admin)
-    db.session.add(edlison)
-    db.session.commit()
-    return make_response('ok')
+@user_blu.route('/exceed_the_time', methods=['POST'])
+@need_login
+def exceed():
+    """
+    超期提醒
+    用last_login去比对
 
+    Args:
 
-@user_blu.route('/getRes', methods=['POST'])
-def getRes():
-    users = User.query.all()
-    res = SystemResult().ok()
-    res.set_data([dict(users[0]), dict(users[1])])
-    print(res)
+    Returns:
+
+    @Author  : Edlison
+    @Date    : 1/3/21 21:52
+    """
+    user_name = session.get('user_name')
+    res = exceed_the_time(user_name)
     return jsonify(dict(res))

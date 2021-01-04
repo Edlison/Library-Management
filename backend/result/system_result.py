@@ -1,6 +1,5 @@
 # @Author  : Edlison
 # @Date    : 12/30/20 10:50
-from backend.api.user.models.user_model import User
 
 
 class SystemResult:
@@ -9,10 +8,21 @@ class SystemResult:
         self.msg = None
         self.data = None
 
-    def ok(self):
+    def ok(self, msg='success'):
         self.status = 0
-        self.msg = 'success'
+        self.msg = msg
         return self
+
+    def error(self, msg='error'):
+        self.status = 1
+        self.msg = msg
+        return self
+
+    def is_ok(self):
+        if self.status is None or self.status != 0:
+            return False
+        else:
+            return True
 
     def set_data(self, data):
         self.data = data
@@ -22,14 +32,3 @@ class SystemResult:
 
     def __getitem__(self, item):
         return getattr(self, item)
-
-res = SystemResult().ok()
-
-admin = User('admin', 'admin123')
-edlison = User('edlison', 'qwer1234!')
-admin.set_role(1)
-edlison.set_role(2)
-data = [dict(admin), dict(edlison)]
-print('data', data)
-res.set_data(data)
-print('res', res)
