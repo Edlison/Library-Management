@@ -175,7 +175,7 @@ def resr2borr():
     @Author  : Edlison
     @Date    : 1/3/21 22:05
     """
-    user_name = session.get('user_name')
+    user_name = request.form.get('user_name')
     reser_id = request.form.get('reser_id')
     res = resr_to_borrow(user_name, reser_id)
     return jsonify(dict(res))
