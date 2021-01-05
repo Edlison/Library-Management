@@ -11,7 +11,7 @@ from backend.api.user.mapper.user_mapper import insert_user
 
 @user_blu.route('/register', methods=['POST'])
 @need_login
-def register():
+def register():  # TODO 完善注册 1. 用户名密码合法性判断 2. 查重复用户
     """
     关闭
     注册接口

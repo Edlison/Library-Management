@@ -57,7 +57,7 @@ def reser_book(user_name, book_ISBN):
     res = SystemResult()
     if user:
         if user.user_reserving is not None and user.user_reserving < 1:
-            if book.book_remainder_num is not None and book.book_remainder_num > 1:
+            if book is not None and book.book_remainder_num is not None and book.book_remainder_num > 1:
                 reduce_remainder(book_ISBN)
                 add_reser(user_name, book_ISBN)
                 add_user_reser(user_name)
@@ -86,6 +86,9 @@ def get_borrow_books(user_name):
     res = SystemResult()
     books = serialize_model_list(books)
     if len(books) > 0:
+        for book in books:
+            book_detail = get_book_by_isbn(book['borrow_book_isbn'])
+            book['borrow_book_name'] = book_detail.book_name
         res.set_data(books)
         res.ok('获取借阅信息成功')
     else:
@@ -133,8 +136,13 @@ def get_resr_book(user_name):
     book = get_resr_book_by_user_name(user_name)
     res = SystemResult()
     if book:
-        res.set_data(serialize_model(book))
-        res.ok('获取预约信息成功')
+        book_detail = get_book_by_isbn(book.reser_book_isbn)
+        if book_detail:
+            res.set_data(serialize_model(book))
+            res.data['reser_book_name'] = book_detail.book_name
+            res.ok('获取预约信息成功')
+        else:
+            res.error('获取图书详细信息失败')
     else:
         res.ok('没有预约信息')
     return res

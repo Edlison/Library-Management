@@ -13,7 +13,7 @@ from flask import request, jsonify, session
 def borrow():
     """
     借书流程：
-    用户登陆 - 用户借书小于3本 - 库存大于1 - 库存减1 - 借阅表写入 - 用户借书数加1 - 借书成功
+    用户登陆 - （改）管理员控制借书 - 用户借书小于3本 - 库存大于1 - 库存减1 - 借阅表写入 - 用户借书数加1 - 借书成功
     Tips:
     默认借3个月
 
@@ -77,13 +77,6 @@ def gba():
     return jsonify(dict(res))
 
 
-@cir_blu.route('/get_resr_all', methods=['POST'])
-@need_login
-def gra():
-    res = get_resr_all()
-    return jsonify(dict(res))
-
-
 @cir_blu.route('/get_resr', methods=['POST'])
 @need_login
 def get_resr():
@@ -99,6 +92,13 @@ def get_resr():
     """
     user_name = session.get('user_name')
     res = get_resr_book(user_name)
+    return jsonify(dict(res))
+
+
+@cir_blu.route('/get_resr_all', methods=['POST'])
+@need_login
+def gra():
+    res = get_resr_all()
     return jsonify(dict(res))
 
 

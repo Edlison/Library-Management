@@ -1,7 +1,7 @@
 # @Author  : Edlison
 # @Date    : 1/3/21 09:41
 from backend.api.user.mapper.user_mapper import get_user_by_name_password, update_user_login_time, get_user_by_name
-from backend.api.circulation.mapper.circulation_mapper import get_borrowing_books_by_user_name
+from backend.api.circulation.mapper.circulation_mapper import get_borrowing_books_by_user_name, get_book_by_isbn
 from backend.result.system_result import SystemResult
 from hashlib import sha256
 from flask import g
@@ -66,7 +66,11 @@ def exceed_the_time(user_name):
         for book in books:
             if is_dt_later(now, book.borrow_end_time):
                 data.append(book)
-        res.set_data(serialize_model_list(data))
+        data = serialize_model_list(data)
+        for d in data:  # 获取每本书名
+            book_detail = get_book_by_isbn(d['borrow_book_isbn'])
+            d['borrow_book_name'] = book_detail.book_name
+        res.set_data(data)
         res.ok('获取超期图书成功')
     else:
         res.error('没有该用户的图书信息')
