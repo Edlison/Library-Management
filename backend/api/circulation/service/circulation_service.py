@@ -99,26 +99,27 @@ def get_borrow_books(user_name):
 
 
 def get_borrow_all():
+    """
+    获取全部借阅信息
+
+    Args:
+
+    Returns:
+
+    @Author  : Edlison
+    @Date    : 1/5/21 16:51
+    """
     books = get_borrowing_books_all()
     res = SystemResult()
     if books:
         books = serialize_model_list(books)
+        for book in books:
+            book_detail = get_book_by_isbn(book['borrow_book_isbn'])
+            book['borrow_book_name'] = book_detail['book_name']
         res.set_data(books)
         res.ok('获取全部借阅图书成功')
     else:
         res.error('获取借阅图书失败')
-    return res
-
-
-def get_resr_all():
-    books = get_reservation_books_all()
-    res = SystemResult()
-    if books:
-        books = serialize_model_list(books)
-        res.set_data(books)
-        res.ok('获取全部预约图书成功')
-    else:
-        res.error('获取预约图书失败')
     return res
 
 
@@ -145,6 +146,31 @@ def get_resr_book(user_name):
             res.error('获取图书详细信息失败')
     else:
         res.ok('没有预约信息')
+    return res
+
+
+def get_resr_all():
+    """
+    获取全部预约信息
+
+    Args:
+
+    Returns:
+
+    @Author  : Edlison
+    @Date    : 1/5/21 16:51
+    """
+    books = get_reservation_books_all()
+    res = SystemResult()
+    if books:
+        books = serialize_model_list(books)
+        for book in books:
+            book_detail = get_book_by_isbn(book['borrow_book_isbn'])
+            book['borrow_book_name'] = book_detail['book_name']
+        res.set_data(books)
+        res.ok('获取全部预约图书成功')
+    else:
+        res.error('获取预约图书失败')
     return res
 
 
