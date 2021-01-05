@@ -141,7 +141,7 @@ def show_return_catalog():
     return jsonify(dict(res))
 
 
-@catalog_blu.route('/drop_catalog/', methods=['POST'])
+@catalog_blu.route('/drop_catalog', methods=['POST'])
 def drop_catalog():
     book_ISBN = request.form['book_ISBN']
     book = search_book_ISBN(book_ISBN)[0]
@@ -157,7 +157,7 @@ def drop_catalog():
     # 删除所有的书
 
 
-@catalog_blu.route('/report_loss/', methods=['POST'])
+@catalog_blu.route('/report_loss', methods=['POST'])
 def report_loss():
     book_ISBN = request.form['book_ISBN']
     book_num = request.form['book_num']
