@@ -165,7 +165,7 @@ def get_resr_all():
     if books:
         books = serialize_model_list(books)
         for book in books:
-            book_detail = get_book_by_isbn(book['borrow_book_isbn'])
+            book_detail = get_book_by_isbn(book['reser_book_isbn'])
             book['borrow_book_name'] = book_detail['book_name']
         res.set_data(books)
         res.ok('获取全部预约图书成功')
