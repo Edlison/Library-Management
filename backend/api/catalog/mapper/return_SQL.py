@@ -39,10 +39,10 @@ def search_return_book():
     return return_book_json
 
 
-def update_return_book_book_num(book_ISBN, book_num):
+def update_return_book_book_num(book_ISBN,book_return_reason, book_num):
     # 更新书的数量，通过ISBN以及书的状态查询书的实体
-    return_book = Return.query.filter(Return.book_ISBN == book_ISBN).first()
+    return_book = Return.query.filter(Return.book_ISBN == book_ISBN,Return.book_return_reason == book_return_reason).first()
     # 更新数量
-    return_book.book_num = return_book.book_num + book_num
+    return_book.book_num = return_book.book_num + int(book_num)
     # 提交数据
     db.session.commit()

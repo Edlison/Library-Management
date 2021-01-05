@@ -37,18 +37,25 @@ def addcatalog_one():
             res.set_data(["书目已有编目", "更新编目数量成功"])
             return jsonify(dict(res))
     elif book_state == '0':
+        book_return_reason = request.form['book_return_reason']
+        book_seller = request.form['book_seller']
         if search_return_book_ISBN(book_ISBN) == []:
-            book_return_reason = request.form['book_return_reason']
-            book_seller = request.form['book_seller']
             insert_return(book_ISBN, book_name, book_author, book_public_company, book_num, book_return_reason, book_seller)
             res = SystemResult().ok()
-            res.set_data(["编目成功", "退货"])
+            res.set_data(["退货成功记录退货清单"])
             return jsonify(dict(res))
         else:
-            update_return_book_book_num(book_ISBN, book_num)
-            res = SystemResult().ok()
-            res.set_data(["书目已有编目", "更新退货数量成功"])
-            return jsonify(dict(res))
+            if search_return_book_ISBN(book_ISBN)[0].book_return_reason == book_return_reason:
+                update_return_book_book_num(book_ISBN,book_return_reason ,book_num)
+                res = SystemResult().ok()
+                res.set_data(["已记录退货图书", "更新退货数量成功"])
+                return jsonify(dict(res))
+            else:
+                insert_return(book_ISBN, book_name, book_author, book_public_company, book_num, book_return_reason,
+                              book_seller)
+                res = SystemResult().ok()
+                res.set_data(["退货成功记录退货清单"])
+                return jsonify(dict(res))
 
 
 @catalog_blu.route('/addcatalog_list/', methods=['POST'])
@@ -78,13 +85,24 @@ def addcatalog_list():
                 # 已有编目，更新数量
                 update_catalog_book_num_add(book_ISBN, book_num)
         elif book_state == 0:
+            book_return_reason = request.form['book_return_reason']
+            book_seller = request.form['book_seller']
             if search_return_book_ISBN(book_ISBN) == []:
-                book_return_reason = each.get("book_return_reason")
-                book_seller = each.get("book_seller")
                 insert_return(book_ISBN, book_name, book_author, book_public_company, book_num, book_return_reason,
                               book_seller)
             else:
-                update_return_book_book_num(book_ISBN, book_num)
+                if search_return_book_ISBN(book_ISBN)[0].book_return_reason == book_return_reason:
+                    update_return_book_book_num(book_ISBN, book_return_reason, book_num)
+                else:
+                    insert_return(book_ISBN, book_name, book_author, book_public_company, book_num, book_return_reason,
+                                  book_seller)
+            # if search_return_book_ISBN(book_ISBN) == []:
+            #     book_return_reason = each.get("book_return_reason")
+            #     book_seller = each.get("book_seller")
+            #     insert_return(book_ISBN, book_name, book_author, book_public_company, book_num, book_return_reason,
+            #                   book_seller)
+            # else:
+            #     update_return_book_book_num(book_ISBN, book_num)
     if catalog_id_list == []:
         res = SystemResult().error()
         res.set_data(["所有图书已被重复编目"])
