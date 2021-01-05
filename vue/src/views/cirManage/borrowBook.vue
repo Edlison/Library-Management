@@ -17,7 +17,7 @@
 
 <script>
 import { borrow } from "@/api/borrow";
-import axios from "axios";
+import Axios from "axios";
 export default {
   data() {
     return {
@@ -30,12 +30,15 @@ export default {
   methods: {
     onSubmit() {
       console.log(this.form);
+      let _this=this;
       if (this.form.name && this.form.book_ISBN) {
-        var formData = this.form;
+        var data = new FormData();
+        data.append("user_name",this.form.name)
+        data.append("book_ISBN",this.form.book_ISBN)
         Axios({
           method: "post",
           url: "/api/cir/borrow",
-          data: formData,
+          data: data,
         }).then(function (res) {
           console.log(res);
           if (res.data.status == 0) {

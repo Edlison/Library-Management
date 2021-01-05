@@ -102,12 +102,12 @@ export default {
     return {
       text: "在此输入您希望图书馆购入的书籍信息",
       form: {
-        book_name: "数据库系统概论",
-        book_author: "王珊",
-        book_public_company: "高等教育出版社",
-        book_price: "39.6",
-        book_ISBN: "978-7-04-040664-1",
-        book_num: "1",
+        // book_name: "数据库系统概论",
+        // book_author: "王珊",
+        // book_public_company: "高等教育出版社",
+        // book_price: "39.6",
+        // book_ISBN: "978-7-04-040664-1",
+        // book_num: "1",
       },
       rule: {
         book_name: [

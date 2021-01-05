@@ -78,28 +78,6 @@ export default {
   },
   methods: {
     getdata() {
-      let j = [
-        // {
-        //   book_name: "JavaScript高级程序设计",
-        //   book_author: "Nicholas",
-        //   book_public_company: "人民邮电出版社",
-        //   book_ISBN: "978-7-115-27579-0",
-        //   book_class: "TP",
-        //   book_num: 1,
-        //   book_state: 0,
-        //   book_return_reason: "破损",
-        // },
-        // {
-        //   book_name: "乌合之众大众心理研究",
-        //   book_author: "古斯塔夫",
-        //   book_public_company: "民主与建设出版社",
-        //   book_ISBN: "978-7-5139-1952-4",
-        //   book_class: "C",
-        //   book_num: 5,
-        //   book_state: 1,
-        // },
-      ];
-      console.log(JSON.stringify(j));
       var formData = new FormData();
       formData.append("user_name", "edlison");
       formData.append("user_password", "123123");
@@ -120,14 +98,28 @@ export default {
       });
     },
     interview(index, row) {
+      let _this=this;
+      let data=new FormData();
+      data.append("book_ISBN",row.book_ISBN);
       Axios({
         method: "post",
         url: "/api/cir/reserve",
-        data:{
-            "book_ISBN":row.book_ISBN
-        }
+        data:data
       }).then(function (res) {
         console.log(res);
+        if(res.data.status=1){
+          _this.$message({
+            message: res.data.msg,
+            type: "info",
+          });
+          _this.getdata();
+        }else{
+          _this.$message({
+            message: res.data.msg,
+            type: "error",
+          });
+        }
+
       });
     },
   },

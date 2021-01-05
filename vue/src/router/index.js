@@ -109,6 +109,12 @@ export const constantRoutes = [
         meta: { title: '单次借书', icon: 'borrow' }
       },
       {
+        path: 'b_order',
+        name: 'b_order',
+        component: () => import('@/views/cirManage/orderMan'),
+        meta: { title: '预约管理', icon: 'return' }
+      },
+      {
         path: 'b_return',
         name: 'b_return',
         component: () => import('@/views/cirManage/borrow_return'),
@@ -129,17 +135,17 @@ export const constantRoutes = [
         component: () => import('@/views/catalogue/interviewResult'),
         meta: { title: '采访清单', icon: 'nested' }
       },
-      {
-        path: 'addBook',
-        name: 'addBook',
-        component: () => import('@/views/catalogue/addBook'),
-        meta: { title: '新增图书', icon: 'nested' }
-      },
+      // {
+      //   path: 'addBook',
+      //   name: 'addBook',
+      //   component: () => import('@/views/catalogue/addBook'),
+      //   meta: { title: '新增图书', icon: 'nested' }
+      // },
       {
         path: 'deleteBook',
         name: 'deleteBook',
         component: () => import('@/views/catalogue/deleteBook'),
-        meta: { title: '删除图书', icon: 'nested' }
+        meta: { title: '报损图书', icon: 'nested' }
       },
       {
         path: 'catalogueBook',

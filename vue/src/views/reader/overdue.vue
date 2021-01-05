@@ -19,9 +19,10 @@
       >
         <el-table-column type="selection" width="45"></el-table-column>
         <el-table-column label="序号" type="index" width="65"></el-table-column>
-        <el-table-column label="ISBN" prop="book_ISBN"> </el-table-column>
-        <el-table-column label="书名" prop="book_name"> </el-table-column>
-        <el-table-column label="超期时间" prop="book_name"> </el-table-column>
+        <el-table-column label="姓名" prop="borrow_user_name"> </el-table-column>
+        <el-table-column label="ISBN" prop="borrow_book_isbn"> </el-table-column>
+        <el-table-column label="书名" prop="borrow_book_name"> </el-table-column>
+        <el-table-column label="应还时间" prop="borrow_end_time"> </el-table-column>
         <el-table-column label="操作">
           <template scope="scope">
             <el-button
@@ -79,7 +80,7 @@ export default {
       let _this = this;
       Axios({
         method: "post",
-        url: "/api",
+        url: "/api/user/exceed_the_time",
       }).then(function (res) {
         console.log(res);
         _this.form = res.data.data;

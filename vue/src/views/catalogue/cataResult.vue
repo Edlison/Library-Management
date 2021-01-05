@@ -21,11 +21,21 @@
         <el-table-column label="序号" type="index" width="65"></el-table-column>
         <el-table-column label="ISBN" prop="book_ISBN"> </el-table-column>
         <el-table-column label="书名" prop="book_name"> </el-table-column>
-         <el-table-column label="编目号" prop="catalog_id"> </el-table-column>
+        <el-table-column label="编目号" prop="catalog_id"> </el-table-column>
         <el-table-column label="作者" prop="book_author"> </el-table-column>
         <el-table-column label="出版社" prop="book_public_company">
         </el-table-column>
         <el-table-column label="数量" prop="book_num"> </el-table-column>
+        <el-table-column label="操作">
+          <template scope="scope">
+            <el-button
+              type="primary"
+              size="small"
+              @click="Delete(scope.row)"
+              >删除</el-button
+            >
+          </template>
+        </el-table-column>
       </el-table>
     </div>
   </div>
@@ -72,22 +82,59 @@ export default {
       return this.dormitory;
     },
   },
-  created:function(){
+  created: function () {
     this.getdata();
-},
-  mounted: {
-
   },
+  mounted: {},
   methods: {
-      getdata() {
-      let _this=this;
+    getdata() {
+      let _this = this;
       Axios({
         method: "get",
-        url: "/api/catalog/showcatalog/",
+        url: "/api/catalog/showcatalog",
       }).then(function (res) {
-        _this.dormitory=res.data.data
+        console.log(res);
+        _this.dormitory = res.data.data;
       });
-    }
+    },
+    //删除
+    Delete(row) {
+      this.$confirm("确定删除此条记录？", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning",
+      })
+        .then(() => {
+          let _this = this;
+          let data = new FormData();
+          data.append("book_ISBN",row.book_ISBN)
+          Axios({
+            method: "POST",
+            url: "/api/catalog/drop_catalog",
+            data: data
+          }).then(function (res) {
+            console.log(res);
+            if (res.data.status == 0) {
+              _this.$message({
+                message: res.data.data,
+                type: "success",
+              });
+              _this.getdata();
+            } else {
+              _this.$message({
+                message: res.data.data,
+                type: "error",
+              });
+            }
+          });
+        })
+        .catch(() => {
+          this.$message({
+            type: "info",
+            message: "已取消删除",
+          });
+        });
+    },
   },
 };
 </script>

@@ -10,7 +10,7 @@ export function singleCata(data) {
 
 export function Cata(data) {
   return request({
-    url: '/addbook',
+    url: '//api/catalog/addcatalog_list/',
     method: 'post',
     data,
   })

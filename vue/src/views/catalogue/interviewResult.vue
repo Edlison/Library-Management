@@ -37,12 +37,6 @@ export default {
   data() {
     return {
       dormitory: [
-        {
-          book_ISBN: "987-987-2910-21-1",
-          book_name: "大学室友",
-          book_author: "测试",
-          book_public_company: "测试",
-        },
       ],
       search: "",
     };
@@ -75,15 +69,13 @@ export default {
   created:function(){
     this.getdata();
 },
-  mounted: {
 
-  },
   methods: {
       getdata() {
       let _this=this;
       Axios({
         method: "get",
-        url: "/api/interview/showinterviews/",
+        url: "/api/interview/showinterviews",
       }).then(function (res) {
         _this.dormitory=res.data.data
       });

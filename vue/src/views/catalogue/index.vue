@@ -40,8 +40,14 @@
           </el-form-item>
           <el-form-item label="退货原因">
             <el-input
-              v-model="form.class"
+              v-model="form.book_return_reason"
               placeholder="若状态为退货请填退货原因"
+            />
+          </el-form-item>
+          <el-form-item label="供应商">
+            <el-input
+              v-model="form.book_seller"
+              placeholder="若状态为退货请填图书供应商"
             />
           </el-form-item>
           <el-form-item>
@@ -95,6 +101,7 @@
 import UploadExcelComponent from "@/components/UploadExcel/index.vue";
 import { singleCata } from "@/api/catalogue/";
 import { Cata } from "@/api/catalogue/";
+import Axios from "axios"
 export default {
   components: { UploadExcelComponent },
   data() {
@@ -102,12 +109,12 @@ export default {
       activeName: "first",
       text: "请在此输入编目的书籍信息",
       form: {
-        book_name: "cd",
-        book_author: "cd",
-        book_public_company: "cd",
+        book_name: "CSS世界",
+        book_author: "张鑫旭",
+        book_public_company: "人民邮电出版社",
         book_ISBN: "978-7-115-47066-9",
-        book_num: "1",
-        book_class: "",
+        book_num: "10",
+        book_class: "TP",
         book_state: "",
         book_return_reason: "",
       },
@@ -157,6 +164,7 @@ export default {
     //   console.log(tab, event);
     // },
     onSubmit() {
+      let _this=this
       if (
         this.form.book_name &&
         this.form.book_author &&
@@ -166,7 +174,11 @@ export default {
         this.form.book_class &&
         this.form.book_state
       ) {
-        if (this.form.book_state == "0" && !this.form.book_return_reason) {
+        if (
+          this.form.book_state == "0" &&
+          !this.form.book_return_reason &&
+          !this.form.book_seller
+        ) {
           this.$message({
             message: "请填写退货原因！",
             type: "warning",
@@ -181,16 +193,17 @@ export default {
         formData.append("book_class", this.form.book_class);
         formData.append("book_state", this.form.book_state);
         formData.append("book_return_reason", this.form.book_return_reason);
+        formData.append("book_seller", this.form.book_seller);
         Axios({
           method: "post",
-          url: "/api/catalog/addcatalog_one/",
+          url: "/api/catalog/addcatalog_one",
           data: formData,
         }).then(function (res) {
           console.log(res);
           if (res.data.status == 0) {
             _this.$message({
-              message: "操作成功！",
-              type: "success",
+              message: res.data.data,
+              type: "info",
             });
           } else {
             _this.$message({
@@ -232,6 +245,7 @@ export default {
         "book_num",
         "book_state",
         "book_return_reason",
+        "book_seller",
       ];
       for (let i = 0; i < myHeader.length; i++) {
         if (header[i] != myHeader[i]) {
@@ -253,21 +267,26 @@ export default {
       this.tableHeader = header;
     },
     submitExcel() {
+      let _this=this;
       if (this.tableData && this.tableHeader) {
-        this.tableHeader[0]="name";
-        console.log(this.tableHeader)
-        console.log(this.tableData)
+        this.tableHeader[0] = "name";
+        console.log(this.tableHeader);
+        console.log(this.tableData);
         var data = JSON.stringify(this.tableData);
         console.log(data);
-        return ;
-        Cata(data).then((res) => {
-          if (res.code == 200) {
-            this.$message({
-              message: "添加成功",
+        Axios({
+          method: "post",
+          url: "/api/catalog/addcatalog_list",
+          data: data,
+          // headers:{'Content-Type':"application/json"}
+        }).then(function (res) {
+          if (res.data.status == 1) {
+            _this.$message({
+              message: res.data.data,
             });
           } else {
             console.log(res);
-            this.$message({
+            _this.$message({
               message: "出错，添加失败！",
               type: "warning",
             });

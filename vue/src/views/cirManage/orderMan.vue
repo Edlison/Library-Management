@@ -20,6 +20,8 @@
         <el-table-column type="selection" width="45"></el-table-column>
         <!-- <el-table-column label="序号" type="index" width="65"></el-table-column> -->
         <el-table-column label="ISBN" prop="reser_book_isbn"> </el-table-column>
+        
+        <el-table-column label="姓名" prop="reser_user_name"> </el-table-column>
         <el-table-column label="书名" prop="reser_book_name"> </el-table-column>
         <el-table-column label="预约开始时间" prop="reser_start_time">
         </el-table-column>
@@ -31,7 +33,7 @@
               type="primary"
               size="small"
               @click="cancel(scope.$index, scope.row)"
-              >取消预约</el-button
+              >转借阅</el-button
             >
           </template>
         </el-table-column>
@@ -83,11 +85,11 @@ export default {
       let _this = this;
       Axios({
         method: "post",
-        url: "/api/cir/get_resr",
+        url: "/api/cir/get_resr_all",
       }).then(function (res) {
         console.log(res);
         if(res.data.data){
-          _this.form = Array( res.data.data);
+          _this.form = res.data.data;
         }
         console.log(_this.form);
         // if (res.data.data) {
@@ -106,7 +108,7 @@ export default {
       data.append("reser_id",row.reser_id)
       Axios({
         method: "post",
-        url: "/api/cir/canc_resr",
+        url: "/api/cir/resr2borr",
         data: data
       }).then(function (res) {
         console.log(res);
@@ -115,8 +117,8 @@ export default {
             message: res.data.msg,
             type: "success",
           });
-          _this.form=[];
-          console.log("取消预约刷新")
+          _this.formData();
+          console.log("预约转续借刷新")
         } else {
           _this.$message({
             message: res.data.msg,

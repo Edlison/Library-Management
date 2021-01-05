@@ -25,7 +25,7 @@
         <el-table-column label="出版社" prop="book_public_company">
         </el-table-column>
         <el-table-column label="数量" prop="book_num"> </el-table-column>
-        <el-table-column label="价格" prop="book_price"> </el-table-column>
+        <el-table-column label="供应商" prop="book_seller"> </el-table-column>
         <el-table-column label="退货原因" prop="book_return_reason"> </el-table-column>
       </el-table>
     </div>
@@ -38,12 +38,6 @@ export default {
   data() {
     return {
       dormitory: [
-        {
-          book_ISBN: "987-987-2910-21-1",
-          book_name: "大学室友",
-          book_author: "测试",
-          book_public_company: "测试",
-        },
       ],
       search: "",
     };
@@ -84,7 +78,7 @@ export default {
       let _this=this;
       Axios({
         method: "get",
-        url: "/api/catalog/show_return_catalog/",
+        url: "/api/catalog/show_return_catalog",
       }).then(function (res) {
         _this.dormitory=res.data.data
       });

@@ -18,15 +18,27 @@
         style="width: 100%"
       >
         <el-table-column type="selection" width="45"></el-table-column>
-        <el-table-column label="序号" type="index" width="65"></el-table-column>
+        <el-table-column
+          label="序号"
+          type="index"
+          width="60"
+          align="center"
+        ></el-table-column>
         <el-table-column
           label="借阅人"
           prop="borrow_user_name"
-          width="150"
+          width="80"
         ></el-table-column>
         <el-table-column label="ISBN" prop="borrow_book_isbn">
         </el-table-column>
-        <el-table-column label="left？" prop="borrow_renew_left">
+        <el-table-column label="书名" prop="borrow_book_name">
+        </el-table-column>
+        <el-table-column
+          label="剩余续借次数"
+          prop="borrow_renew_left"
+          width="120"
+          align="center"
+        >
         </el-table-column>
         <el-table-column label="借阅时间" prop="borrow_start_time">
         </el-table-column>
@@ -96,7 +108,7 @@ export default {
       let _this = this;
       Axios({
         method: "post",
-        url: "/api/cir/get_borrow",
+        url: "/api/cir/get_borrow_all",
       }).then(function (res) {
         console.log(res);
         _this.form = res.data.data;
