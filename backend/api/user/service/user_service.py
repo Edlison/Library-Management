@@ -1,6 +1,7 @@
 # @Author  : Edlison
 # @Date    : 1/3/21 09:41
-from backend.api.user.mapper.user_mapper import get_user_by_name_password, update_user_login_time, get_user_by_name
+from backend.api.user.mapper.user_mapper import get_user_by_name_password, update_user_login_time, get_user_by_name, \
+    insert_user, get_all
 from backend.api.circulation.mapper.circulation_mapper import get_borrowing_books_by_user_name, get_book_by_isbn
 from backend.result.system_result import SystemResult
 from hashlib import sha256
@@ -8,6 +9,17 @@ from flask import g
 import datetime
 from backend.util.datetime_cmp import is_dt_later
 from backend.util.serialize import serialize_model_list
+
+
+def register(user_name, user_password, user_role):
+    user = get_user_by_name(user_name)
+    res = SystemResult()
+    if not user:
+        insert_user(user_name, user_password, user_role)
+        res.ok('插入用户成功')
+    else:
+        res.error('已有该用户')
+    return res
 
 
 def validate(user_name, user_password):
@@ -45,6 +57,27 @@ def info(user_name):
     """
     user = get_user_by_name(user_name)
     return user
+
+
+def get_user_all():
+    """
+    获取所有用户列表
+
+    Args:
+
+    Returns:
+
+    @Author  : Edlison
+    @Date    : 1/5/21 16:33
+    """
+    users = get_all()
+    res = SystemResult()
+    if users and len(users) > 0:
+        res.set_data(serialize_model_list(users))
+        res.ok('获取用户列表成功')
+    else:
+        res.error('没有用户')
+    return res
 
 
 def exceed_the_time(user_name):

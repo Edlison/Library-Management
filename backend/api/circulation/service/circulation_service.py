@@ -27,7 +27,7 @@ def borrow_book(user_name, book_ISBN):
     res = SystemResult()
     if user:
         if user.user_borrowing is not None and user.user_borrowing < 3:  # 用户借阅数小于3
-            if book.book_remainder_num is not None and book.book_remainder_num > 1:  # 图书库存大于1
+            if book is not None and book.book_remainder_num is not None and book.book_remainder_num > 1:  # 图书库存大于1
                 reduce_remainder(book_ISBN)
                 add_borrow(user_name, book_ISBN)
                 add_user_borrowing(user_name)

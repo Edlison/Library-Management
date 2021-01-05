@@ -8,7 +8,7 @@ class User(db.Model):
     user_id = db.Column(db.Integer, primary_key=True, autoincrement=True, comment='用户ID')
     user_name = db.Column(db.String(32), unique=True, nullable=False, comment='用户名')
     user_password = db.Column(db.String(255), nullable=False, comment='密码')
-    user_role = db.Column(db.Integer, nullable=False, default=1, comment='用户角色 0admin/1reader/2inter/3cat/4useradmin')
+    user_role = db.Column(db.Integer, nullable=False, default=1, comment='用户角色 0superadmin/1reader/2inter/3cat/4cir/5useradmin')
     user_borrowing = db.Column(db.Integer, nullable=True, default=0, comment='借书不能超过3本')
     user_reserving = db.Column(db.Integer, nullable=True, default=0, comment='预约不能超过1本')
     user_credit = db.Column(db.Integer, nullable=True, default=0, comment='信用机制 暂时没用')

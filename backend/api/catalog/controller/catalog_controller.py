@@ -90,7 +90,7 @@ def addcatalog_list():
                 update_return_book_book_num(book_ISBN, book_num)
     if catalog_id_list == []:
         res = SystemResult().error()
-        res.set_data(["所有图书已被重复编目"])
+        res.set_data(["图书已被重复编目"])
         return jsonify(dict(res))
     else:
         res = SystemResult().ok()

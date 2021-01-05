@@ -4,14 +4,13 @@ from backend.api.user import user_blu
 from flask import request, jsonify, session, g
 from backend.filter.login_filter import need_login
 from backend.result.system_result import SystemResult
-from backend.util.serialize import serialize_model_list, serialize_model
-from backend.api.user.service.user_service import validate, info, exceed_the_time
-from backend.api.user.mapper.user_mapper import insert_user
+from backend.util.serialize import serialize_model
+from backend.api.user.service.user_service import validate, info, exceed_the_time, register, get_user_all
 
 
 @user_blu.route('/register', methods=['POST'])
 @need_login
-def register():  # TODO 完善注册 1. 用户名密码合法性判断 2. 查重复用户
+def r():
     """
     关闭
     注册接口
@@ -26,8 +25,8 @@ def register():  # TODO 完善注册 1. 用户名密码合法性判断 2. 查重
     user_name = request.form.get('user_name')
     user_password = request.form.get('user_password')
     user_role = request.form.get('user_role')
-    insert_user(user_name, user_password, user_role)
-    return 'ok'
+    res = register(user_name, user_password, user_role)
+    return jsonify(dict(res))
 
 
 @user_blu.route('/login', methods=['POST'])
@@ -78,6 +77,13 @@ def get_info():
     else:
         res = SystemResult().error('未找到用户')
         return jsonify(dict(res))
+
+
+@user_blu.route('/get_user_all', methods=['POST'])
+@need_login
+def gua():
+    res = get_user_all()
+    return jsonify(dict(res))
 
 
 @user_blu.route('/exceed_the_time', methods=['POST'])

@@ -52,6 +52,21 @@ def get_user_by_name(user_name):
     return user
 
 
+def get_all():
+    """
+    获取所有用户信息
+
+    Args:
+
+    Returns:
+
+    @Author  : Edlison
+    @Date    : 1/5/21 16:30
+    """
+    users = User.query.all()
+    return users
+
+
 def add_user_borrowing(user_name):
     """
     用户增加借阅数量
@@ -66,6 +81,7 @@ def add_user_borrowing(user_name):
     user = User.query.filter_by(user_name=user_name).first()
     user.user_borrowing += 1
     db.session.commit()
+
 
 def reduce_user_borrowing(user_name):
     """
