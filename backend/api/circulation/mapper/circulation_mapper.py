@@ -92,6 +92,16 @@ def get_borrowing_books_by_user_name(user_name):
     return borrowings
 
 
+def get_borrowing_books_all():
+    borrowngs = Borrowing.query.all()
+    return borrowngs
+
+
+def get_reservation_books_all():
+    reservations = Reservation.query.all()
+    return reservations
+
+
 def get_resr_book_by_user_name(user_name):
     """
     通过用户名获取预约信息

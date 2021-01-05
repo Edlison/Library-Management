@@ -17,4 +17,11 @@ class Reservation(db.Model):
         self.reser_start_time = start_time
         self.reser_end_time = end_time
 
+    def keys(self):
+        return ['reser_id', 'reser_user_name', 'reser_book_isbn', 'reser_start_time', 'reser_end_time']
 
+    def __getitem__(self, item):
+        return getattr(self, item)
+
+    def __repr__(self):
+        return '<Reservation reser_id: {}>'.format(self.reser_id)

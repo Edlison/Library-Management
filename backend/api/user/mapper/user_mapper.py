@@ -115,7 +115,7 @@ def reduce_user_reser(user_name):
     db.session.commit()
 
 
-def insert_user(user_name, user_password):
+def insert_user(user_name, user_password, user_role):
     """
     关闭
     录入用户
@@ -127,6 +127,6 @@ def insert_user(user_name, user_password):
     @Author  : Edlison
     @Date    : 1/4/21 17:02
     """
-    user = User(user_name, sha256(user_password.encode('utf-8')).hexdigest(), 0, datetime.datetime.now())
+    user = User(user_name, sha256(user_password.encode('utf-8')).hexdigest(), user_role, datetime.datetime.now())
     db.session.add(user)
     db.session.commit()

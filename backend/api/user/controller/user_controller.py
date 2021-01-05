@@ -14,7 +14,7 @@ from backend.api.user.mapper.user_mapper import insert_user
 def register():
     """
     关闭
-    注册接口 默认用户角色为0
+    注册接口
 
     Args:
 
@@ -25,7 +25,8 @@ def register():
     """
     user_name = request.form.get('user_name')
     user_password = request.form.get('user_password')
-    insert_user(user_name, user_password)
+    user_role = request.form.get('user_role')
+    insert_user(user_name, user_password, user_role)
     return 'ok'
 
 

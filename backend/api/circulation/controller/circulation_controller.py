@@ -4,7 +4,7 @@ from backend.api.circulation import cir_blu
 from backend.filter.login_filter import need_login
 from backend.api.circulation.service.circulation_service import \
     borrow_book, reser_book, get_borrow_books, get_resr_book, get_certain_book, get_all_books, renew_book, return_book, \
-    cancel_resr, resr_to_borrow
+    cancel_resr, resr_to_borrow, get_borrow_all, get_resr_all
 from flask import request, jsonify, session
 
 
@@ -24,7 +24,7 @@ def borrow():
     @Author  : Edlison
     @Date    : 1/3/21 21:55
     """
-    user_name = session.get('user_name')
+    user_name = request.form.get('user_name')
     book_ISBN = request.form.get('book_ISBN')
     res = borrow_book(user_name, book_ISBN)
     return jsonify(dict(res))
@@ -67,6 +67,20 @@ def get_borrow():
     """
     user_name = session.get('user_name')
     res = get_borrow_books(user_name)
+    return jsonify(dict(res))
+
+
+@cir_blu.route('/get_borrow_all', methods=['POST'])
+@need_login
+def gba():
+    res = get_borrow_all()
+    return jsonify(dict(res))
+
+
+@cir_blu.route('/get_resr_all', methods=['POST'])
+@need_login
+def gra():
+    res = get_resr_all()
     return jsonify(dict(res))
 
 

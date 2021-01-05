@@ -5,7 +5,7 @@ from backend.api.user.mapper.user_mapper import get_user_by_name, add_user_borro
 from backend.api.circulation.mapper.circulation_mapper import \
     get_book_by_isbn, add_borrow, add_reser, reduce_remainder, get_borrowing_books_by_user_name, get_resr_book_by_user_name, \
     get_all_books_in_catalog, get_borrowing_by_id, renew_borrowing_by_id, delete_borrowing_by_id, increase_remainder, \
-    get_resr_by_id, delete_resr_by_id
+    get_resr_by_id, delete_resr_by_id, get_borrowing_books_all, get_reservation_books_all
 from backend.util.serialize import serialize_model_list, serialize_model
 from backend.util.datetime_cmp import is_dt_later
 import datetime
@@ -92,6 +92,30 @@ def get_borrow_books(user_name):
         res.ok('没有借阅信息')
     print(books)
     print(res)
+    return res
+
+
+def get_borrow_all():
+    books = get_borrowing_books_all()
+    res = SystemResult()
+    if books:
+        books = serialize_model_list(books)
+        res.set_data(books)
+        res.ok('获取全部借阅图书成功')
+    else:
+        res.error('获取借阅图书失败')
+    return res
+
+
+def get_resr_all():
+    books = get_reservation_books_all()
+    res = SystemResult()
+    if books:
+        books = serialize_model_list(books)
+        res.set_data(books)
+        res.ok('获取全部预约图书成功')
+    else:
+        res.error('获取预约图书失败')
     return res
 
 
