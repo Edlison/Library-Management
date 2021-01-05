@@ -93,8 +93,6 @@ def get_borrow_books(user_name):
         res.ok('获取借阅信息成功')
     else:
         res.ok('没有借阅信息')
-    print(books)
-    print(res)
     return res
 
 

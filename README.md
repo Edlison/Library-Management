@@ -4,6 +4,33 @@
 
 **后端**[FLASK](backend) by [Edlison](https://github.com/Edlison) & [ad-zt](https://github.com/ad-zt)
 
+## Introduction
+...
+
+## Environment
+
+### 服务器环境
+阿里云ECS  
+系统: CentOS  7.7 64位  
+CPU&内存: 1 核 512MB  
+带宽: 1Mbps 
+
+### 数据库环境
+Server version: 5.5.64-MariaDB MariaDB Server
+
+### 开发工具
+VSCode  
+PyCharm 2020.3.1 (Professional Edition)
+
+### 软件环境
+VUE  
+Python 3.6  
+Flask_SQLAlchemy 2.4.2  
+Flask_Script 2.0.6  
+SQLAlchemy 1.3.13  
+Flask 1.1.1  
+
+
 ## Backend
 
 ### Quick Start
@@ -55,7 +82,10 @@
   |/api/circulation/get_book|获取某本书的详细信息|
   |/api/circulation/get_all_books|获取全部馆藏信息|
 
-----
-APIs: http://rap2.taobao.org/repository/editor?id=274105
 
-GitRepo: https://github.com/Edlison/Library-Management
+
+----
+
+API文档: http://rap2.taobao.org/repository/editor?id=274105
+
+Git仓库: https://github.com/Edlison/Library-Management

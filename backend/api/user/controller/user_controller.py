@@ -57,7 +57,7 @@ def login():
 
 @user_blu.route('/change_password', methods=['POST'])
 @need_login
-def repasword():  # TODO 不能一样
+def repasword():
     user_id = request.form.get('user_id')
     user_new_password = request.form.get('user_new_password')
     res = change_password(user_id, user_new_password)
@@ -66,8 +66,10 @@ def repasword():  # TODO 不能一样
 
 @user_blu.route('/delete_user', methods=['POST'])
 @need_login
-def du():  # TODO 判断没有借阅预约书籍
+def du():
     user_id = request.form.get('user_id')
+    if int(user_id) == int(session.get('user_id')):
+        return jsonify(dict(SystemResult().error('不能删除本账号')))
     res = delete_user(user_id)
     return jsonify(dict(res))
 

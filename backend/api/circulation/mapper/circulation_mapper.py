@@ -186,7 +186,7 @@ def delete_borrowing_by_id(borrow_id):
 
 def increase_remainder(book_ISBN):
     """
-    减少库存
+    增加库存
 
     Args:
 

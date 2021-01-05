@@ -135,7 +135,7 @@ def return_():
     @Author  : Edlison
     @Date    : 1/3/21 22:01
     """
-    user_name = session.get('user_name')
+    user_name = request.form.get('user_name')
     borrow_id = request.form.get('borrow_id')
     res = return_book(user_name, borrow_id)
     return jsonify(dict(res))
