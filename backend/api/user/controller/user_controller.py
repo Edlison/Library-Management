@@ -5,7 +5,8 @@ from flask import request, jsonify, session, g
 from backend.filter.login_filter import need_login
 from backend.result.system_result import SystemResult
 from backend.util.serialize import serialize_model
-from backend.api.user.service.user_service import validate, info, exceed_the_time, register, get_user_all
+from backend.api.user.service.user_service import validate, info, exceed_the_time, register, get_user_all,\
+    change_password, delete_user
 
 
 @user_blu.route('/register', methods=['POST'])
@@ -51,6 +52,23 @@ def login():
         res.ok('登陆成功')
     else:
         res.error('账号或密码错误')
+    return jsonify(dict(res))
+
+
+@user_blu.route('/change_password', methods=['POST'])
+@need_login
+def repasword():  # TODO 不能一样
+    user_id = request.form.get('user_id')
+    user_new_password = request.form.get('user_new_password')
+    res = change_password(user_id, user_new_password)
+    return jsonify(dict(res))
+
+
+@user_blu.route('/delete_user', methods=['POST'])
+@need_login
+def du():  # TODO 判断没有借阅预约书籍
+    user_id = request.form.get('user_id')
+    res = delete_user(user_id)
     return jsonify(dict(res))
 
 

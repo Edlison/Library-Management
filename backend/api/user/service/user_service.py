@@ -1,7 +1,7 @@
 # @Author  : Edlison
 # @Date    : 1/3/21 09:41
 from backend.api.user.mapper.user_mapper import get_user_by_name_password, update_user_login_time, get_user_by_name, \
-    insert_user, get_all
+    insert_user, get_all, get_user_by_id, update_user_pwd_by_id, delete_user_by_id
 from backend.api.circulation.mapper.circulation_mapper import get_borrowing_books_by_user_name, get_book_by_isbn
 from backend.result.system_result import SystemResult
 from hashlib import sha256
@@ -77,6 +77,41 @@ def get_user_all():
         res.ok('获取用户列表成功')
     else:
         res.error('没有用户')
+    return res
+
+
+def change_password(user_id, user_new_password):
+    user = get_user_by_id(user_id)
+    res = SystemResult()
+    if user:
+        encoded_pwd = sha256(user_new_password.encode('utf-8')).hexdigest()
+        if user.user_password != encoded_pwd:
+            row = update_user_pwd_by_id(user_id, encoded_pwd)
+            if row > 0:
+                res.ok('修改成功')
+            else:
+                res.error('修改失败')
+        else:
+            res.error('密码不能与上一个相同')
+    else:
+        res.error('没有这个用户')
+    return res
+
+
+def delete_user(user_id):
+    user = get_user_by_id(user_id)
+    res = SystemResult()
+    if user:
+        if user.user_borrowing == 0 and user.user_reserving == 0:
+            row = delete_user_by_id(user_id)
+            if row > 0:
+                res.ok('删除成功')
+            else:
+                res.error('删除失败')
+        else:
+            res.error('用户不能有书在流通')
+    else:
+        res.error('没有这个用户')
     return res
 
 

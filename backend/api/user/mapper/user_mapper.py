@@ -33,7 +33,7 @@ def update_user_login_time(user_name):
     @Author  : Edlison
     @Date    : 1/4/21 17:00
     """
-    p = User.query.filter(User.user_name==user_name).update({'user_last_login_time': datetime.datetime.now()})
+    row = User.query.filter(User.user_name==user_name).update({'user_last_login_time': datetime.datetime.now()})
     db.session.commit()
 
 
@@ -146,3 +146,20 @@ def insert_user(user_name, user_password, user_role):
     user = User(user_name, sha256(user_password.encode('utf-8')).hexdigest(), user_role, datetime.datetime.now())
     db.session.add(user)
     db.session.commit()
+
+
+def get_user_by_id(user_id):
+    user = User.query.filter_by(user_id=user_id).first()
+    return user
+
+
+def update_user_pwd_by_id(user_id, user_new_pwd):
+    row = User.query.filter_by(user_id=user_id).update({'user_password': user_new_pwd})
+    db.session.commit()
+    return row
+
+
+def delete_user_by_id(user_id):
+    row = User.query.filter_by(user_id=user_id).delete()
+    db.session.commit()
+    return row
