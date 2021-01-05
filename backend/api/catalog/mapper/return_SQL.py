@@ -44,6 +44,5 @@ def update_return_book_book_num(book_ISBN, book_num):
     return_book = Return.query.filter(Return.book_ISBN == book_ISBN).first()
     # 更新数量
     return_book.book_num = return_book.book_num + book_num
-    return_book.book_remainder_num = return_book.book_remainder_num + book_num
     # 提交数据
     db.session.commit()
