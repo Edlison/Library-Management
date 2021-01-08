@@ -18,7 +18,7 @@
       <el-form-item label="ISBN" prop="book_ISBN">
         <el-input v-model="form.book_ISBN" />
         <div style="margin-top: 10px">
-          示例：978-7-115-47066-9，必须使用 -（英文字符）进行分隔
+          示例：978-7-115-47066-9，使用 -（英文字符）进行分隔 或直接输入纯数字
         </div>
         <!-- <el-select
           v-model="form.isbn1"
@@ -55,10 +55,10 @@
           </div>
         </div> -->
       </el-form-item>
-      <el-form-item label="单价">
+      <el-form-item label="单价" prop="book_price">
         <el-input v-model="form.book_price" />
       </el-form-item>
-      <el-form-item label="数量">
+      <el-form-item label="数量" prop="book_num">
         <el-input v-model="form.book_num" />
       </el-form-item>
       <el-form-item>
@@ -123,10 +123,21 @@ export default {
         book_ISBN: [
           { required: true, message: "请输入ISBN ", trigger: "blur" },
           {
-            pattern: /^((978|979)-)?([0-9]{1,5}-[0-9]{1,6}-[0-9]{1,6}-([0-9]|X))$/,
+            pattern: /^([0-9]|X|-)+$/,
             message: "ISBN格式有误",
           },
         ],
+        book_price:[
+                    {
+            pattern: /(^[1-9]\d*(\.\d{1,2})?$)|(^0(\.\d{1,2})?$)/,
+            message: "请输入最大精度为两位小数",
+          }
+        ],
+        book_num:[
+          {
+            pattern: /^([1-9])+([0-9])?$/,
+            message: "数量在1-99之间",
+          },]
       },
     };
   },

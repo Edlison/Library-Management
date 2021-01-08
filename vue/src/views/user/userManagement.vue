@@ -4,7 +4,7 @@
       <div style="display: inline-block">搜索：</div>
       <el-input
         v-model="search"
-        style="display: inline-block; width: 1000px"
+        style="display: inline-block; width: 800px"
         placeholder="请输入搜索内容"
       >
       </el-input>
@@ -261,7 +261,7 @@ export default {
       data.append("user_name", this.addForm.user_name);
       data.append("user_password", this.addForm.user_password);
       data.append("user_role", this.addForm.user_role);
-      var nameReg = /^[0-9a-zA-Z]*$/;
+      var nameReg = /^[0-9a-zA-Z|_]*$/;
       var passwordReg = /^[0-9a-zA-Z]*$/;
       if (!this.addForm.user_name || !this.addForm.user_password) {
         this.$message({
@@ -272,7 +272,7 @@ export default {
       }
       if (!nameReg.test(this.addForm.user_name)) {
         this.$message({
-          message: "用户名只能含有数字与大小写字母",
+          message: "用户名只能含有数字、大小写字母与下划线",
           type: "error",
         });
         return;
@@ -318,6 +318,7 @@ export default {
         });
         // _this.dormitory = res.data.data;
       });
+      this.add = false;
     },
     //关闭新增时执行
     closeadd() {
@@ -351,9 +352,6 @@ export default {
             method: "POST",
             url: "/api/user/delete_user",
             data: data,
-            headers: {
-              "Content-Type": "application/json",
-            },
           }).then(function (res) {
             _this.$message({
               message: res.data.msg,

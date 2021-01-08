@@ -1,10 +1,10 @@
 <template>
   <div class="app-container">
     <el-form ref="form" :model="form" label-width="120px">
-      <el-form-item label="借阅人">
+      <el-form-item label="借阅人账号名称">
         <el-input v-model="form.name" />
       </el-form-item>
-      <el-form-item label="借阅书籍">
+      <el-form-item label="借阅书籍ISBN">
         <el-input v-model="form.book_ISBN" />
       </el-form-item>
       <el-form-item>
@@ -34,24 +34,16 @@ export default {
       if (this.form.name && this.form.book_ISBN) {
         var data = new FormData();
         data.append("user_name",this.form.name)
-        data.append("book_ISBN",this.form.book_ISBN)
+        data.append("book_ISBN",this.form.book_ISBN.trim())
         Axios({
           method: "post",
           url: "/api/cir/borrow",
           data: data,
         }).then(function (res) {
-          console.log(res);
-          if (res.data.status == 0) {
             _this.$message({
-              message: "借书成功！",
-              type: "success",
+              message: res.data.msg,
+              type: "info",
             });
-          } else {
-            _this.$message({
-              message: "出错，请重试",
-              type: "error",
-            });
-          }
         });
       } else {
         this.$message({

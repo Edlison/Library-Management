@@ -143,7 +143,7 @@ export default {
         book_ISBN: [
           { required: true, message: "请输入ISBN ", trigger: "blur" },
           {
-            pattern: /^((978|979)-)?([0-9]{1,5}-[0-9]{1,6}-[0-9]{1,5}-([0-9]|X))$/,
+            pattern: /^([0-9]|X|-)+$/,
             message: "ISBN格式有误",
           },
         ],
@@ -151,7 +151,7 @@ export default {
           { required: true, message: "请输入中图分类号 ", trigger: "blur" },
           {
             pattern: /^([A-Z]|[a-z])*-?([A-Z]|[0-9])+$/,
-            message: "ISBN格式有误",
+            message: "中图分类号格式有误",
           },
         ],
         book_state: [{ required: true, trigger: "blur" }],

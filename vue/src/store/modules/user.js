@@ -6,7 +6,8 @@ const getDefaultState = () => {
   return {
     token: getToken(),
     name: '',
-    avatar: ''
+    avatar: '',
+    roles: []//动态路由修改标记
   }
 }
 
@@ -19,12 +20,15 @@ const mutations = {
   SET_TOKEN: (state, token) => {
     state.token = token
   },
-  SET_NAME: (state, name) => {
-    state.name = name
+  SET_NAME: (state, user_name) => {
+    state.name = user_name
   },
   SET_AVATAR: (state, avatar) => {
     state.avatar = avatar
-  }
+  },
+  SET_ROLES: (state, user_role) => {
+    state.roles = user_role
+  }//动态路由修改标记
 }
 
 const actions = {
@@ -39,8 +43,10 @@ const actions = {
         formData.append('user_password',password);
       // login({ user_name: username.trim(), user_password: password }).then(response => {
         login(formData).then(response => {
-        console.log(111);
         console.log(response,"xiangying")
+        if(response.status==1){
+          reject(response.msg)
+        }
         const { data } = response
         console.log(data,"dataces");
         commit('SET_TOKEN', data.user_role)
@@ -54,7 +60,7 @@ const actions = {
 
   // get user info
   getInfo({ commit, state }) {
-
+    console.log("getinfo")
     return new Promise((resolve, reject) => {
       getInfo(state.token).then(response => {
         const { data } = response
@@ -63,10 +69,10 @@ const actions = {
           // console.log(response,"res测试")
           return reject('Verification failed, please Login again.')
         }
-
-        const { user_name, avatar } = data
-        console.log(user_name)
+        const { user_role,user_name, avatar } = data
+        console.log(user_name,"name")
         commit('SET_NAME', user_name)
+        commit('SET_ROLES', user_role)
         commit('SET_AVATAR', avatar)
         resolve(data)
       }).catch(error => {

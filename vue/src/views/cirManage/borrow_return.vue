@@ -100,7 +100,7 @@ export default {
       return this.form;
     },
   },
-  created: function () {
+  mounted: function () {
     this.getdata();
   },
   methods: {
@@ -110,31 +110,46 @@ export default {
         method: "post",
         url: "/api/cir/get_borrow_all",
       }).then(function (res) {
-        console.log(res);
         _this.form = res.data.data;
         // console.log(_this.form);
       });
     },
     rebook(index, row) {
+      let _this = this;
+      let data=new FormData();
+      data.append("borrow_id",row.borrow_id)
+      data.append("user_name",row.borrow_user_name)
       Axios({
         method: "post",
         url: "api/cir/ret_book",
-        data: {
-          borrow_id: row.borrow_id,
-        },
+        // data: {
+        //   borrow_id: row.borrow_id,
+        // },
+        data:data
       }).then(function (res) {
         console.log(res);
+        _this.$message({
+          message: res.data.msg,
+          type: "info",
+        });
+        _this.getdata();
       });
     },
     renew(index, row) {
+      let _this = this;
+            let data=new FormData();
+      data.append("borrow_id",row.borrow_id)
       Axios({
         method: "post",
         url: "api/cir/renew",
-        data: {
-          borrow_id: row.borrow_id,
-        },
+        data: data
       }).then(function (res) {
-        console.log(res);
+        _this.$message({
+          message: res.data.msg,
+          type: "info",
+        });
+        _this.getdata();
+        // console.log(res);
       });
     },
   },

@@ -7,7 +7,7 @@
         :rules="[
           { required: true, message: '请输入ISBN ', trigger: 'blur' },
           {
-            pattern: /^((978|979)-)?([0-9]{1,5}-[0-9]{1,6}-[0-9]{1,6}-([0-9]|X))$/,
+            pattern: /^([0-9]|X)$/,
             message: 'ISBN格式有误',
           },
         ]"

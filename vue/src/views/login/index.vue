@@ -89,7 +89,7 @@ export default {
     return {
       loginForm: {
         username: "admin",
-        password: "123123",
+        password: "123123@",
       },
       loginRules: {
         username: [
@@ -130,7 +130,10 @@ export default {
           this.$store.dispatch('user/login', this.loginForm).then(() => {
             this.$router.push({ path: this.redirect || '/' })
             this.loading = false
-          }).catch(() => {
+          }).catch((error) => {
+            this.$message({
+              message:error
+            })
             this.loading = false
           })
         } else {
@@ -140,7 +143,8 @@ export default {
       })},
     handleLogin() {
       this.$refs.loginForm.validate(valid => {
-        if (valid&&1) {
+        console.log("vaildCes")
+        if (valid||1) {
           this.loading = true;
           //调用user模块红的login
           console.log("点击登陆按钮")
@@ -149,6 +153,7 @@ export default {
             this.$router.push({ path: this.redirect || '/' });
             this.loading = false;
           }).catch(() => {
+            console.log("登录失败");
             this.loading = false;
           })
         } else {

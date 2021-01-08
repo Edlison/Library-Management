@@ -70,9 +70,6 @@ export default {
   created:function(){
     this.getdata();
 },
-  mounted: {
-
-  },
   methods: {
       getdata() {
       let _this=this;

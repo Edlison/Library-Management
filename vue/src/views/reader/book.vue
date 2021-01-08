@@ -24,6 +24,8 @@
         <el-table-column label="作者" prop="book_author"> </el-table-column>
         <el-table-column label="出版社" prop="book_public_company">
         </el-table-column>
+        <el-table-column label="在馆数量" prop="book_remainder_num">
+        </el-table-column>
         <el-table-column label="操作">
           <template scope="scope">
             <el-button

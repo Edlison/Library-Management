@@ -22,7 +22,7 @@
         <el-table-column label="ISBN" prop="reser_book_isbn"> </el-table-column>
         
         <el-table-column label="姓名" prop="reser_user_name"> </el-table-column>
-        <el-table-column label="书名" prop="reser_book_name"> </el-table-column>
+        <el-table-column label="书名" prop="borrow_book_name"> </el-table-column>
         <el-table-column label="预约开始时间" prop="reser_start_time">
         </el-table-column>
         <el-table-column label="预约结束时间" prop="reser_end_time">
@@ -51,31 +51,6 @@ export default {
       search: "",
     };
   },
-  computed: {
-    // 模糊搜索
-    // tables() {
-    //   const search = this.search;
-    //   if (search) {
-    //     // filter() 方法创建一个新的数组，新数组中的元素是通过检查指定数组中符合条件的所有元素。
-    //     // 注意： filter() 不会对空数组进行检测。
-    //     // 注意： filter() 不会改变原始数组。
-    //     return this.form.filter((data) => {
-    //       // some() 方法用于检测数组中的元素是否满足指定条件;
-    //       // some() 方法会依次执行数组的每个元素：
-    //       // 如果有一个元素满足条件，则表达式返回true , 剩余的元素不会再执行检测;
-    //       // 如果没有满足条件的元素，则返回false。
-    //       // 注意： some() 不会对空数组进行检测。
-    //       // 注意： some() 不会改变原始数组。
-    //       return Object.keys(data).some((key) => {
-    //         // indexOf() 返回某个指定的字符在某个字符串中首次出现的位置，如果没有找到就返回-1；
-    //         // 该方法对大小写敏感！所以之前需要toLowerCase()方法将所有查询到内容变为小写。
-    //         return String(data[key]).toLowerCase().indexOf(search) > -1;
-    //       });
-    //     });
-    //   }
-    //   return this.form;
-    // },
-  },
   created: function () {
     this.getdata();
   },
@@ -87,25 +62,20 @@ export default {
         method: "post",
         url: "/api/cir/get_resr_all",
       }).then(function (res) {
-        console.log(res);
+        // console.log(res);
         if(res.data.data){
           _this.form = res.data.data;
         }
-        console.log(_this.form);
-        // if (res.data.data) {
-        //   _this.form = res.data.data;
-        // }
-        //  else {
-        //   _this.form = [
-        //   ];
-        // }
+        // console.log(_this.form);
       });
     },
     cancel(index, row) {
       let _this=this;
       console.log(row.reser_id);
       let data=new FormData();
+      
       data.append("reser_id",row.reser_id)
+      data.append("user_name",row.reser_user_name)
       Axios({
         method: "post",
         url: "/api/cir/resr2borr",
@@ -117,8 +87,8 @@ export default {
             message: res.data.msg,
             type: "success",
           });
-          _this.formData();
-          console.log("预约转续借刷新")
+          _this.getData();
+          // console.log("预约转续借刷新")
         } else {
           _this.$message({
             message: res.data.msg,
