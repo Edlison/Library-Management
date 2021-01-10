@@ -18,7 +18,7 @@
       <el-form-item label="ISBN" prop="book_ISBN">
         <el-input v-model="form.book_ISBN" />
         <div style="margin-top: 10px">
-          示例：978-7-115-47066-9，使用 -（英文字符）进行分隔 或直接输入纯数字
+          示例：978-7-115-47066-9，使用 -（英文字符）进行分隔
         </div>
         <!-- <el-select
           v-model="form.isbn1"
@@ -123,7 +123,7 @@ export default {
         book_ISBN: [
           { required: true, message: "请输入ISBN ", trigger: "blur" },
           {
-            pattern: /^([0-9]|X|-)+$/,
+            pattern: /^(978|979)?-?[0-9]{1,5}-[0-9]{2,5}-[0-9]{1,6}-([0-9]|X)$/,
             message: "ISBN格式有误",
           },
         ],

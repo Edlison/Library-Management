@@ -356,7 +356,7 @@ export const asyncRouterMap = [
     component: Layout,
     redirect: '/reader',
     name: 'reader',
-    meta: { title: '读者系统', icon: 'reader',role: ['0','1'] },
+    meta: { title: '读者系统', icon: 'reader' },
     children: [
       {
         path: 'book',
@@ -381,12 +381,6 @@ export const asyncRouterMap = [
         name: 'userRecord',
         component: () => import('@/views/reader/userRecord'),
         meta: { title: '借阅记录', icon: 'borrow' }
-      },
-      {
-        path: 'overdue',
-        name: 'overdue',
-        component: () => import('@/views/reader/overdue'),
-        meta: { title: '超期通报', icon: 'overdue' }
       }
     ]
   },

@@ -1,10 +1,24 @@
 <template>
   <div class="app-container">
     <el-form ref="form" :model="form" label-width="120px">
-      <el-form-item label="借阅人账号名称">
+      <el-form-item
+        label="借阅人账号名称"
+        prop="name"
+        :rules="[{ required: true, message: '请输入ISBN ', trigger: 'blur' }]"
+      >
         <el-input v-model="form.name" />
       </el-form-item>
-      <el-form-item label="借阅书籍ISBN">
+      <el-form-item
+        label="借阅书籍ISBN"
+        prop="book_ISBN"
+        :rules="[
+          { required: true, message: '请输入ISBN ', trigger: 'blur' },
+          {
+            pattern: /^(978|979)?-?[0-9]{1,5}-[0-9]{2,5}-[0-9]{1,6}-([0-9]|X)$/,
+            message: 'ISBN格式有误',
+          },
+        ]"
+      >
         <el-input v-model="form.book_ISBN" />
       </el-form-item>
       <el-form-item>
@@ -30,20 +44,20 @@ export default {
   methods: {
     onSubmit() {
       console.log(this.form);
-      let _this=this;
+      let _this = this;
       if (this.form.name && this.form.book_ISBN) {
         var data = new FormData();
-        data.append("user_name",this.form.name)
-        data.append("book_ISBN",this.form.book_ISBN.trim())
+        data.append("user_name", this.form.name);
+        data.append("book_ISBN", this.form.book_ISBN.trim());
         Axios({
           method: "post",
           url: "/api/cir/borrow",
           data: data,
         }).then(function (res) {
-            _this.$message({
-              message: res.data.msg,
-              type: "info",
-            });
+          _this.$message({
+            message: res.data.msg,
+            type: "info",
+          });
         });
       } else {
         this.$message({

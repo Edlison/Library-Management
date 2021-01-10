@@ -101,23 +101,14 @@
 import UploadExcelComponent from "@/components/UploadExcel/index.vue";
 import { singleCata } from "@/api/catalogue/";
 import { Cata } from "@/api/catalogue/";
-import Axios from "axios"
+import Axios from "axios";
 export default {
   components: { UploadExcelComponent },
   data() {
     return {
       activeName: "first",
       text: "请在此输入编目的书籍信息",
-      form: {
-        book_name: "CSS世界",
-        book_author: "张鑫旭",
-        book_public_company: "人民邮电出版社",
-        book_ISBN: "978-7-115-47066-9",
-        book_num: "10",
-        book_class: "TP",
-        book_state: "",
-        book_return_reason: "",
-      },
+      form: {},
       tableData: [],
       tableHeader: [],
       up_status: true,
@@ -164,7 +155,7 @@ export default {
     //   console.log(tab, event);
     // },
     onSubmit() {
-      let _this=this
+      let _this = this;
       if (
         this.form.book_name &&
         this.form.book_author &&
@@ -267,31 +258,37 @@ export default {
       this.tableHeader = header;
     },
     submitExcel() {
-      let _this=this;
+      let _this = this;
       if (this.tableData && this.tableHeader) {
-        this.tableHeader[0] = "name";
         console.log(this.tableHeader);
         console.log(this.tableData);
-        var data = JSON.stringify(this.tableData);
-        console.log(data);
-        Axios({
-          method: "post",
-          url: "/api/catalog/addcatalog_list",
-          data: data,
-          // headers:{'Content-Type':"application/json"}
-        }).then(function (res) {
-          if (res.data.status == 1) {
-            _this.$message({
-              message: res.data.data,
-            });
-          } else {
-            console.log(res);
-            _this.$message({
-              message: "出错，添加失败！",
-              type: "warning",
-            });
-          }
-        });
+        let mydata = JSON.stringify(this.tableData);
+        if (this.tableData.length==0) {
+          this.$message({
+            message: "EXCEL为空！",
+            type: "warning",
+          });
+          return;
+        } else {
+          Axios({
+            method: "post",
+            url: "/api/catalog/addcatalog_list",
+            data: mydata,
+            // headers:{'Content-Type':"application/json"}
+          }).then(function (res) {
+            if (res.data.status == 1) {
+              _this.$message({
+                message: res.data.data,
+              });
+            } else {
+              console.log(res);
+              _this.$message({
+                message: "出错，添加失败！",
+                type: "warning",
+              });
+            }
+          });
+        }
       } else {
         this.$message({
           message: "请先上传文件！",

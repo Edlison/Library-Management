@@ -7,12 +7,15 @@
         :rules="[
           { required: true, message: '请输入ISBN ', trigger: 'blur' },
           {
-            pattern: /^([0-9]|X)$/,
+            pattern: /^(978|979)?-?[0-9]{1,5}-[0-9]{2,5}-[0-9]{1,6}-([0-9]|X)$/,
             message: 'ISBN格式有误',
           },
         ]"
       >
         <el-input v-model="form.book_ISBN" />
+        <div style="margin-top: 10px">
+          示例：978-7-115-47066-9，使用 -（英文字符）进行分隔
+        </div>
       </el-form-item>
       <el-form-item
         label="数量"
@@ -43,8 +46,8 @@ export default {
   methods: {
     onSubmit() {
       console.log(this.form);
-      let _this=this;
-      if (this.form.book_ISBN&&this.form.book_num) {
+      let _this = this;
+      if (this.form.book_ISBN && this.form.book_num) {
         var formData = new FormData();
         formData.append("book_ISBN", this.form.book_ISBN);
         formData.append("book_num", this.form.book_num);
