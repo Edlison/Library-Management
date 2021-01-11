@@ -59,6 +59,10 @@ def addcatalog_list():
     # 获取json数组
     json_list = json.loads(request.get_data(as_text=True))
     catalog_id_list = []
+    if len(json_list) == 0 :
+        res = SystemResult().error()
+        res.set_data("无图书输入")
+        return jsonify(dict(res))
     # 对数组中的每一个json进行处理
     for each in json_list:
         # 转换成字典
@@ -90,7 +94,7 @@ def addcatalog_list():
                 update_return_book_book_num(book_ISBN, book_num)
     if catalog_id_list == []:
         res = SystemResult().error()
-        res.set_data(["图书已被重复编目"])
+        res.set_data("图书已被重复编目")
         return jsonify(dict(res))
     else:
         res = SystemResult().ok()
@@ -161,7 +165,12 @@ def drop_catalog():
 def report_loss():
     book_ISBN = request.form['book_ISBN']
     book_num = request.form['book_num']
-    book = search_book_ISBN(book_ISBN)[0]
+    if search_book_ISBN(book_ISBN)==[]:
+        res = SystemResult().ok()
+        res.set_data(["图书不存在"])
+        return jsonify(dict(res))
+    else:
+        book = search_book_ISBN(book_ISBN)[0]
     if (book.book_remainder_num - int(book_num)) > 1:
         update_catalog_book_num_sub(book_ISBN, book_num)
         res = SystemResult().ok()

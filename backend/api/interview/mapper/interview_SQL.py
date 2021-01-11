@@ -7,7 +7,7 @@ def insert(book_ISBN,book_name,book_price,book_author,book_public_company,book_n
     #查询是否有重复推荐
     interview_list =  Interview.query.filter(Interview.book_ISBN == book_ISBN)
     #对清单内数量数目计数
-    count = Interview.query.filter().count()
+    count = Interview.query.all()[-1].interview_id
     #书目第一次被推荐
     if interview_list == ():
         interview_id = count + 1
