@@ -171,7 +171,7 @@ def report_loss():
         return jsonify(dict(res))
     else:
         book = search_book_ISBN(book_ISBN)[0]
-    if (book.book_remainder_num - int(book_num)) > 1:
+    if (book.book_remainder_num - int(book_num)) > 0:
         update_catalog_book_num_sub(book_ISBN, book_num)
         res = SystemResult().ok()
         res.set_data(["报损成功"])
