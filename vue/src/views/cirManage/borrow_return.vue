@@ -42,7 +42,7 @@
         </el-table-column>
         <el-table-column label="借阅时间" prop="borrow_start_time">
         </el-table-column>
-        <el-table-column label="还书时间" prop="borrow_end_time">
+        <el-table-column label="应还时间" prop="borrow_end_time">
         </el-table-column>
 
         <el-table-column label="操作">

@@ -88,15 +88,15 @@ export default {
     };
     return {
       loginForm: {
-        username: "admin",
-        password: "123123@",
+        username: "superadmin",
+        password: "123123",
       },
       loginRules: {
         username: [
-          { required: true, trigger: "blur"},
+          { required: true, message:"请输入用户名", trigger: "blur"},
         ],
         password: [
-          { required: true, trigger: "blur" },
+          { required: true, message:"请输入密码",trigger: "blur" },
         ],
       },
       loading: false,

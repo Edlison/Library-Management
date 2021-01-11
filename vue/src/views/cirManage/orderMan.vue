@@ -20,9 +20,10 @@
         <el-table-column type="selection" width="45"></el-table-column>
         <!-- <el-table-column label="序号" type="index" width="65"></el-table-column> -->
         <el-table-column label="ISBN" prop="reser_book_isbn"> </el-table-column>
-        
+
         <el-table-column label="姓名" prop="reser_user_name"> </el-table-column>
-        <el-table-column label="书名" prop="borrow_book_name"> </el-table-column>
+        <el-table-column label="书名" prop="borrow_book_name">
+        </el-table-column>
         <el-table-column label="预约开始时间" prop="reser_start_time">
         </el-table-column>
         <el-table-column label="预约结束时间" prop="reser_end_time">
@@ -56,30 +57,32 @@ export default {
   },
   methods: {
     getdata() {
-      var formData = new FormData();
       let _this = this;
       Axios({
         method: "post",
         url: "/api/cir/get_resr_all",
       }).then(function (res) {
-        // console.log(res);
-        if(res.data.data){
+        console.log(res);
+        if (res.data.data) {
           _this.form = res.data.data;
+        }else{
+          _this.form = [];
+          
         }
         // console.log(_this.form);
       });
     },
     cancel(index, row) {
-      let _this=this;
+      let _this = this;
       console.log(row.reser_id);
-      let data=new FormData();
-      
-      data.append("reser_id",row.reser_id)
-      data.append("user_name",row.reser_user_name)
+      let data = new FormData();
+
+      data.append("reser_id", row.reser_id);
+      data.append("user_name", row.reser_user_name);
       Axios({
         method: "post",
         url: "/api/cir/resr2borr",
-        data: data
+        data: data,
       }).then(function (res) {
         console.log(res);
         if (res.data.status == 0) {
@@ -87,8 +90,9 @@ export default {
             message: res.data.msg,
             type: "success",
           });
-          _this.getData();
-          // console.log("预约转续借刷新")
+          console.log("预约转续借刷新")
+          _this.getdata();
+
         } else {
           _this.$message({
             message: res.data.msg,

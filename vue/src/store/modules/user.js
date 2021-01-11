@@ -73,7 +73,7 @@ const actions = {
         console.log(user_name,"name")
         commit('SET_NAME', user_name)
         commit('SET_ROLES', user_role)
-        commit('SET_AVATAR', avatar)
+        // commit('SET_AVATAR', 'https://cn.bing.com/images/search?view=detailV2&ccid=%2b61ALvXY&id=7CEDF65D0BF841E800D5DD490B1AD35BDF3E3B85&thid=OIP.-61ALvXYwPH8_XQFzAdBsQAAAA&mediaurl=https%3a%2f%2fimg2.woyaogexing.com%2f2019%2f01%2f04%2fd20853279e5148d5931319cc130c9814!400x400.jpeg&exph=400&expw=400&q=%e5%a4%b4%e5%83%8f+%e5%8d%a1%e9%80%9a%e5%8a%a8%e6%bc%ab%e7%8c%ab&simid=608034307294626776&ck=B9BFC2395141DEE287EE299EA3B3830E&selectedIndex=44&FORM=IRPRST')
         resolve(data)
       }).catch(error => {
         reject(error)

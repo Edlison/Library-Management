@@ -128,7 +128,7 @@ export default {
           { required: true, message: "请输入数量", trigger: "blur" },
           {
             pattern: /^([1-9]+)[0-9]*$/,
-            message: "请输入不以0开头的正确数字",
+            message: "请输入不以0开头的无符号正整数",
           },
         ],
         book_ISBN: [
@@ -167,13 +167,13 @@ export default {
       ) {
         if (
           this.form.book_state == "0" &&
-          !this.form.book_return_reason &&
-          !this.form.book_seller
+          (!this.form.book_return_reason || !this.form.book_seller)
         ) {
           this.$message({
-            message: "请填写退货原因！",
+            message: "请填写退货原因及供应商！",
             type: "warning",
           });
+          return;
         }
         var formData = new FormData();
         formData.append("book_name", this.form.book_name);
@@ -202,6 +202,11 @@ export default {
               type: "error",
             });
           }
+        });
+      } else {
+        _this.$message({
+          message: "信息不全",
+          type: "error",
         });
       }
     },
@@ -263,7 +268,7 @@ export default {
         console.log(this.tableHeader);
         console.log(this.tableData);
         let mydata = JSON.stringify(this.tableData);
-        if (this.tableData.length==0) {
+        if (this.tableData.length == 0) {
           this.$message({
             message: "EXCEL为空！",
             type: "warning",

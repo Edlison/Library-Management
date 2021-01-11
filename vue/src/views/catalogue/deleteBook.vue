@@ -20,7 +20,13 @@
       <el-form-item
         label="数量"
         prop="book_num"
-        :rules="[{ required: true, message: '请输入数量 ', trigger: 'blur' }]"
+                :rules="[
+          { required: true, message: '请输入报损数量 ', trigger: 'blur' },
+          {
+            pattern: /^([1-9]+)[0-9]*$/,
+            message: '请输入不以0开头的无符号正整数',
+          },
+        ]"
       >
         <el-input v-model="form.book_num" />
       </el-form-item>
@@ -60,12 +66,12 @@ export default {
           console.log(res);
           if (res.data.status == 0) {
             _this.$message({
-              message: "报损成功",
+              message: res.data.data,
             });
           } else {
-            console.log(res);
+            // console.log(res);
             _this.$message({
-              message: "出错，报损失败！",
+              message: res.data.data,
               type: "warning",
             });
           }

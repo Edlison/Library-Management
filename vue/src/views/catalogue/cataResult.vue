@@ -1,5 +1,10 @@
 <template>
   <div class="dormitory" style="margin: 10px 0 0 10px">
+    <el-card class="box-card">
+      <div>
+        编目结果:类别-书架号-层数-书册数
+      </div>
+    </el-card>
     <div class="searchWord">
       <div style="display: inline-block">搜索：</div>
       <el-input
@@ -28,10 +33,7 @@
         <el-table-column label="数量" prop="book_num"> </el-table-column>
         <el-table-column label="操作">
           <template scope="scope">
-            <el-button
-              type="primary"
-              size="small"
-              @click="Delete(scope.row)"
+            <el-button type="primary" size="small" @click="Delete(scope.row)"
               >删除</el-button
             >
           </template>
@@ -107,11 +109,11 @@ export default {
         .then(() => {
           let _this = this;
           let data = new FormData();
-          data.append("book_ISBN",row.book_ISBN)
+          data.append("book_ISBN", row.book_ISBN);
           Axios({
             method: "POST",
             url: "/api/catalog/drop_catalog",
-            data: data
+            data: data,
           }).then(function (res) {
             console.log(res);
             if (res.data.status == 0) {

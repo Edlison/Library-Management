@@ -4,7 +4,7 @@
       <el-form-item
         label="借阅人账号名称"
         prop="name"
-        :rules="[{ required: true, message: '请输入ISBN ', trigger: 'blur' }]"
+        :rules="[{ required: true, message: '请输入借阅人账号 ', trigger: 'blur' }]"
       >
         <el-input v-model="form.name" />
       </el-form-item>

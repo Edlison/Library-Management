@@ -130,7 +130,7 @@ export default {
         book_price:[
                     {
             pattern: /(^[1-9]\d*(\.\d{1,2})?$)|(^0(\.\d{1,2})?$)/,
-            message: "请输入最大精度为两位小数",
+            message: "请输入最大精度为两位小数的数字",
           }
         ],
         book_num:[
@@ -156,7 +156,7 @@ export default {
       formData.append("book_name", this.form.book_name);
       formData.append("book_author", this.form.book_author);
       formData.append("book_public_company", this.form.book_public_company);
-      formData.append("book_price", this.form.book_price);
+      formData.append("book_price", this.form.book_price?this.form.book_price:0);
       formData.append("book_ISBN", this.form.book_ISBN);
       formData.append("book_num", this.form.book_num);
       formData.append("user_id", "1");
@@ -168,12 +168,12 @@ export default {
         console.log(res)
         if (res.data.status == 0) {
           _this.$message({
-            message: "收到您的推荐！",
+            message: res.data.msg,
             type: "success",
           });
         } else {
           _this.$message({
-            message: "出错，请重试",
+            message: res.data.msg,
             type: "error",
           });
         }

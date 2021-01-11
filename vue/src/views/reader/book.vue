@@ -24,7 +24,9 @@
         <el-table-column label="作者" prop="book_author"> </el-table-column>
         <el-table-column label="出版社" prop="book_public_company">
         </el-table-column>
-        <el-table-column label="在馆数量" prop="book_remainder_num">
+        <el-table-column label="馆藏数量" prop="book_num">
+        </el-table-column>
+        <el-table-column label="可借数量" prop="book_remainder_num">
         </el-table-column>
         <el-table-column label="操作">
           <template scope="scope">
@@ -80,17 +82,7 @@ export default {
   },
   methods: {
     getdata() {
-      var formData = new FormData();
-      formData.append("user_name", "edlison");
-      formData.append("user_password", "123123");
       let _this = this;
-      //   Axios({
-      //     method: "post",
-      //     url: "/api/user/login",
-      //     headers:"multipart/form-data"
-      //   }).then(function (res) {
-      //       console.log(res);
-      //   });
       Axios({
         method: "post",
         url: "/api/cir/get_all_books",

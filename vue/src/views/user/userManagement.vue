@@ -1,107 +1,116 @@
 <template>
-  <div id="depform">
-    <div class="searchWord">
-      <div style="display: inline-block">搜索：</div>
-      <el-input
-        v-model="search"
-        style="display: inline-block; width: 800px"
-        placeholder="请输入搜索内容"
-      >
-      </el-input>
-      <el-button type="primary" @click="addOpen">新增用户</el-button>
-    </div>
-    <!-- 表格 -->
-    <el-table :data="tables" style="width: 100%">
-      <el-table-column prop="user_name" label="用户名" width="180">
-      </el-table-column>
-      <!-- <el-table-column prop="user_password" label="密码" width="180">
+  <div>
+    <el-card class="box-card" style="width: 1000px; margin: 10px 0 0 50px">
+      <div style="text-align:center">
+        0-超级管理员 1-读者 2/3-采访/编目管理员 4-流通管理员 5-用户管理员
+      </div>
+    </el-card>
+    <div id="depform">
+      <div class="searchWord">
+        <div style="display: inline-block">搜索：</div>
+        <el-input
+          v-model="search"
+          style="display: inline-block; width: 800px"
+          placeholder="请输入搜索内容"
+        >
+        </el-input>
+        <el-button type="primary" @click="addOpen">新增用户</el-button>
+      </div>
+      <!-- 表格 -->
+      <el-table :data="tables" >
+        <el-table-column prop="user_name" label="用户名" width="180">
+        </el-table-column>
+        <!-- <el-table-column prop="user_password" label="密码" width="180">
       </el-table-column> -->
-      <el-table-column prop="user_role" label="用户权限" width="200">
-      </el-table-column>
-      <el-table-column prop="user_borrowing" label="借书数量" width="200">
-      </el-table-column>
-      <el-table-column prop="user_reserving" label="预约数量" width="200">
-      </el-table-column>
-      <el-table-column label="操作">
-        <template scope="scope">
-          <el-button
-            type="primary"
-            size="small"
-            @click="Edit(scope.$index, scope.row)"
-            >编辑</el-button
-          >
-          <el-button type="danger" size="small" @click="Delete(scope.row)"
-            >删除</el-button
-          >
-        </template>
-      </el-table-column>
-    </el-table>
-    <el-dialog
-      title="新增"
-      :visible.sync="add"
-      :modal-append-to-body="false"
-      @close="closeadd"
-    >
-      <el-form
-        ref="addform"
-        :model="addForm"
-        label-width="80px"
-        :rules="addrules"
+        <el-table-column prop="user_role" label="用户权限" width="200">
+        </el-table-column>
+        <el-table-column prop="user_borrowing" label="借书数量" width="200">
+        </el-table-column>
+        <el-table-column prop="user_reserving" label="预约数量" width="200">
+        </el-table-column>
+        <el-table-column label="操作">
+          <template scope="scope">
+            <el-button
+              type="primary"
+              size="small"
+              @click="Edit(scope.$index, scope.row)"
+              >编辑</el-button
+            >
+            <el-button type="danger" size="small" @click="Delete(scope.row)"
+              >删除</el-button
+            >
+          </template>
+        </el-table-column>
+      </el-table>
+      <el-dialog
+        title="新增"
+        :visible.sync="add"
+        :modal-append-to-body="false"
+        @close="closeadd"
       >
-        <el-form-item
-          label="用户名"
-          prop="user_name"
-          :rules="[
-            { required: true, message: '请输入用户名 ', trigger: 'blur' },
-          ]"
+        <el-form
+          ref="addform"
+          :model="addForm"
+          label-width="80px"
+          :rules="addrules"
         >
-          <el-input v-model="addForm.user_name" />
-        </el-form-item>
-        <el-form-item
-          label="用户密码"
-          prop="user_password"
-          :rules="[
-            { required: true, message: '请输入用户密码 ', trigger: 'blur' },
-          ]"
-        >
-          <el-input v-model="addForm.user_password" />
-        </el-form-item>
-        <el-form-item label="用户权限" prop="user_role">
-          <el-input
-            v-model="addForm.user_role"
-            placeholder="为空则默认为1-读者"
-          />
-        </el-form-item>
-        <el-form-item>
-          <el-button type="primary" @click="addSubmit">确定增加</el-button>
-          <el-button @click="cancel">取消</el-button>
-        </el-form-item>
-      </el-form>
-    </el-dialog>
+          <el-form-item
+            label="用户名"
+            prop="user_name"
+            :rules="[
+              { required: true, message: '请输入用户名 ', trigger: 'blur' },
+            ]"
+          >
+            <el-input v-model="addForm.user_name" />
+          </el-form-item>
+          <el-form-item
+            label="用户密码"
+            prop="user_password"
+            :rules="[
+              { required: true, message: '请输入用户密码 ', trigger: 'blur' },
+            ]"
+          >
+            <el-input v-model="addForm.user_password" />
+          </el-form-item>
+          <el-form-item label="用户权限" prop="user_role"
+                      :rules="[
+              { required: true, message: '请输入用户角色 ', trigger: 'blur' },
+            ]">
+            <el-input
+              v-model="addForm.user_role"
+            />
+          </el-form-item>
+          <el-form-item>
+            <el-button type="primary" @click="addSubmit">确定增加</el-button>
+            <el-button @click="cancel">取消</el-button>
+          </el-form-item>
+        </el-form>
+      </el-dialog>
 
-    <el-dialog
-      title="编辑"
-      :visible.sync="editForm"
-      size="tiny"
-      :modal-append-to-body="false"
-      @close="closeEdit"
-    >
-      <el-form>
-        <el-form-item label="用户名" prop="user_name">
-          <el-input v-model="editsForm.user_name" :disabled="true" />
-        </el-form-item>
-        <el-form-item label="用户密码" prop="user_password">
-          <el-input v-model="editsForm.user_password" />
-        </el-form-item>
-        <el-form-item label="用户权限">
-          <el-input v-model="editsForm.user_role" :disabled="true" />
-        </el-form-item>
-        <el-form-item>
-          <el-button type="primary" @click="depSubmit">确定修改</el-button>
-          <el-button @click="cancel">取消</el-button>
-        </el-form-item>
-      </el-form>
-    </el-dialog>
+      <el-dialog
+        title="编辑"
+        :visible.sync="editForm"
+        size="tiny"
+        :modal-append-to-body="false"
+        @close="closeEdit"
+      >
+        <el-form>
+          <el-form-item label="用户名" prop="user_name">
+            <el-input v-model="editsForm.user_name" :disabled="true" />
+          </el-form-item>
+          <el-form-item label="用户密码" prop="user_password">
+            <el-input v-model="editsForm.user_password" />
+          </el-form-item>
+          <el-form-item label="用户权限" prop="user_role">
+            <el-input v-model="editsForm.user_role" :disabled="true" />
+          </el-form-item>
+          <el-form-item>
+            <el-button type="primary" @click="depSubmit">确定修改</el-button>
+            <el-button @click="cancel">取消</el-button>
+          </el-form-item>
+        </el-form>
+      </el-dialog>
+    </div>
   </div>
 </template>
  
@@ -115,6 +124,7 @@ export default {
       addrules: {
         name: [{ required: true, message: "请输入", trigger: "blur" }],
         year: [{ required: true, message: "请输入", trigger: "blur" }],
+        role:[{ required: true, message: "请输入", trigger: "blur" }]
       },
       add: false,
       addForm: {},
@@ -145,7 +155,7 @@ export default {
           return Object.keys(data).some((key) => {
             // indexOf() 返回某个指定的字符在某个字符串中首次出现的位置，如果没有找到就返回-1；
             // 该方法对大小写敏感！所以之前需要toLowerCase()方法将所有查询到内容变为小写。
-            return String(data[key]).toLowerCase().indexOf(search) > -1;
+            return String(data[key]).indexOf(search) > -1;
           });
         });
       }
