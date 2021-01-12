@@ -38,7 +38,7 @@ def showinterviews():
     return jsonify(dict(res))
 
 
-@interview_blu.route('/drop_interview/', methods=['POST'])
+@interview_blu.route('/drop_interview', methods=['POST'])
 @need_login
 def drop_interview():
     book_ISBN = request.form['book_ISBN']
