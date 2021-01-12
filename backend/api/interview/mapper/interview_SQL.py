@@ -70,3 +70,16 @@ def search():
     interview_json = json.loads(interview_json)
     #返回数组
     return interview_json
+
+
+
+
+def search_book_ISBN(book_ISBN):
+    #查询并返回一个列表，列表包括全部对象
+    interview_list = Interview.query.filter(Interview.book_ISBN == book_ISBN).all()
+    return interview_list
+
+
+def drop_interview_one(interview):
+    db.session.delete(interview)
+    db.session.commit()

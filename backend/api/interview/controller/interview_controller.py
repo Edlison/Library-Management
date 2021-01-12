@@ -1,6 +1,6 @@
 from flask import  jsonify,request
 from backend.api import db
-from backend.api.interview.mapper.interview_SQL import insert,search
+from backend.api.interview.mapper.interview_SQL import insert, search, drop_interview_one, search_book_ISBN
 from backend.api.interview import interview_blu
 from backend.result.system_result import SystemResult
 from backend.filter.login_filter import need_login
@@ -36,6 +36,19 @@ def showinterviews():
     res = SystemResult().ok()
     res.set_data(interview_search)
     return jsonify(dict(res))
+
+
+@interview_blu.route('/drop_interview/', methods=['POST'])
+@need_login
+def drop_interview():
+    book_ISBN = request.form['book_ISBN']
+    book = search_book_ISBN(book_ISBN)
+    for each in book:
+        drop_interview_one(each)
+    res = SystemResult().ok()
+    res.set_data("删除成功")
+    return jsonify(dict(res))
+
 
 
 @interview_blu.route('/create',methods = ['GET'])
