@@ -26,6 +26,13 @@
         </el-table-column>
         <el-table-column label="数量" prop="book_num"> </el-table-column>
         <el-table-column label="价格" prop="book_price"> </el-table-column>
+                <el-table-column label="操作">
+          <template scope="scope">
+            <el-button type="danger" size="small" @click="Delete(scope.row)"
+              >删除</el-button
+            >
+          </template>
+        </el-table-column>
       </el-table>
     </div>
   </div>
@@ -79,7 +86,36 @@ export default {
       }).then(function (res) {
         _this.dormitory=res.data.data
       });
-    }
+    },
+        Delete(row) {
+      let _this = this;
+      let data = new FormData();
+      data.append("book_ISBN", row.book_ISBN);
+      this.$confirm("删除不可撤销，确定删除此条记录？", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning",
+      })
+        .then(() => {
+          Axios({
+            method: "POST",
+            url: "/api/interview/drop_interview",
+            data: data,
+          }).then(function (res) {
+            _this.$message({
+              message: res.data.msg,
+              type: "info",
+            });
+            _this.getdata();
+          });
+        })
+        .catch(() => {
+          this.$message({
+            type: "info",
+            message: "已取消删除",
+          });
+        });
+    },
   },
 };
 </script>

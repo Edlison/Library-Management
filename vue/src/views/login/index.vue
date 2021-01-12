@@ -56,6 +56,9 @@
         @click.native.prevent="handleSubmit"
         >登录</el-button
       >
+      <div style="color:#FFF; font-size:small">
+        忘记密码请联系图书馆管理员,TEL:156xxxxxxxx
+      </div>
 
       <!-- <div class="tips">
         <span style="margin-right:20px;">username: admin</span>
@@ -89,7 +92,7 @@ export default {
     return {
       loginForm: {
         username: "superadmin",
-        password: "123123",
+        password: "123123@",
       },
       loginRules: {
         username: [

@@ -58,6 +58,26 @@
       </div>
     </el-tab-pane>
     <el-tab-pane label="上传Excel" name="second">
+      <el-collapse v-model="activeNames" @change="handleChange" id="test">
+        <el-collapse-item name="1">
+          <template slot="title">
+            下载EXCEL文件模板<i class="header-icon el-icon-info"></i>
+          </template>
+          <el-row :gutter="20" class="down-con">
+            <el-col :span="6">
+              <div class="grid-content bg-purple" id="butone">
+                <a
+                  class="download"
+                  href="/static/template.xlsx"
+                  download=""
+                  title="下载"
+                  ><el-button type="primary">下载文件模板</el-button></a
+                >
+              </div></el-col
+            >
+          </el-row>
+        </el-collapse-item>
+      </el-collapse>
       <div class="app-container">
         <upload-excel-component
           :on-success="handleSuccess"
@@ -107,7 +127,7 @@ export default {
   data() {
     return {
       activeName: "first",
-      text: "请在此输入编目的书籍信息",
+      text: "请在此输入需要处理的书籍信息",
       form: {},
       tableData: [],
       tableHeader: [],
@@ -134,7 +154,7 @@ export default {
         book_ISBN: [
           { required: true, message: "请输入ISBN ", trigger: "blur" },
           {
-            pattern: /^([0-9]|X|-)+$/,
+            pattern: /^(978|979)?-?[0-9]{1,5}-[0-9]{2,5}-[0-9]{1,6}-([0-9]|X)$/,
             message: "ISBN格式有误",
           },
         ],
@@ -275,20 +295,73 @@ export default {
           });
           return;
         } else {
+          for (let i = 0; i < this.tableData.length; i++) {
+            let tem = this.tableData[i];
+            let temi = i + 1;
+            if (
+              !tem.book_name ||
+              !tem.book_author ||
+              !tem.book_public_company ||
+              !tem.book_ISBN ||
+              !tem.book_class ||
+              !tem.book_num ||
+              (tem.book_state != 0 && tem.book_state != 1)
+            ) {
+              this.$message({
+                message: "第" + temi + "行有信息缺少，请补充后重新尝试！",
+              });
+              return;
+            } else {
+              let ISBNReg = /^(978|979)?-?[0-9]{1,5}-[0-9]{2,5}-[0-9]{1,6}-([0-9]|X)$/;
+              // console.log(ISBNReg.test(tem.book_ISBN),"ces");
+              // return ;
+              if (!ISBNReg.test(tem.book_ISBN)) {
+                this.$message({
+                  message: "第" + temi + "行ISBN不正确，请修改后重新尝试！",
+                });
+                return;
+              }
+              let classReg = /^([A-Z]|[a-z])*-?([A-Z]|[0-9])+$/;
+              if (!classReg.test(tem.book_class)) {
+                this.$message({
+                  message: "第" + temi + "行类别不正确，请修改后重新尝试！",
+                });
+                return;
+              }
+              let numReg = /^([1-9]+)[0-9]*$/;
+              if (!numReg.test(tem.book_num)) {
+                this.$message({
+                  message: "第" + temi + "行数量不正确，请修改后重新尝试！",
+                });
+                return;
+              }
+              if (tem.book_state == 0) {
+                if (!tem.book_return_reason || !tem.book_seller) {
+                  this.$message({
+                    message: "第" + temi + "行缺少必填退货信息，请补充后重新尝试！",
+                  });
+                  return;
+                }
+              }
+            }
+          }
+          // console.log(this.tableData.length, "len");
+          // return;
           Axios({
             method: "post",
             url: "/api/catalog/addcatalog_list",
             data: mydata,
             // headers:{'Content-Type':"application/json"}
           }).then(function (res) {
-            if (res.data.status == 1) {
+            console.log(res, 111);
+            if (res.data.status == 0) {
               _this.$message({
                 message: res.data.data,
               });
             } else {
-              console.log(res);
+              // console.log(res);
               _this.$message({
-                message: "出错，添加失败！",
+                message: res.data.data,
                 type: "warning",
               });
             }

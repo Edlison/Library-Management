@@ -1,10 +1,12 @@
 <template>
   <div class="dormitory" style="margin: 10px 0 0 10px">
-    <el-card class="box-card">
+    <div>
+          <el-card class="box-card">
       <div>
         编目结果:类别-书架号-层数-书册数
       </div>
     </el-card>
+    </div>
     <div class="searchWord">
       <div style="display: inline-block">搜索：</div>
       <el-input
@@ -33,7 +35,7 @@
         <el-table-column label="数量" prop="book_num"> </el-table-column>
         <el-table-column label="操作">
           <template scope="scope">
-            <el-button type="primary" size="small" @click="Delete(scope.row)"
+            <el-button  type="danger" @click="Delete(scope.row)"
               >删除</el-button
             >
           </template>
@@ -140,3 +142,26 @@ export default {
   },
 };
 </script>
+
+<style  scoped>
+.box-card {
+  width: 480px;
+}
+.el-card {
+  text-align: center;
+  margin: 0 auto 10px auto;
+}
+.el-select .el-input {
+  width: 191px;
+}
+.input-with-select .el-input-group__prepend {
+  background-color: #fff;
+}
+.text {
+  font-size: 14px;
+}
+
+.item {
+  padding: 18px 0;
+}
+</style>

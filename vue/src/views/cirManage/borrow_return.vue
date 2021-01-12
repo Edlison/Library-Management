@@ -48,7 +48,7 @@
         <el-table-column label="操作">
           <template scope="scope">
             <el-button
-              type="primary"
+              type="danger"
               size="small"
               @click="rebook(scope.$index, scope.row)"
               >还书</el-button
@@ -116,16 +116,16 @@ export default {
     },
     rebook(index, row) {
       let _this = this;
-      let data=new FormData();
-      data.append("borrow_id",row.borrow_id)
-      data.append("user_name",row.borrow_user_name)
+      let data = new FormData();
+      data.append("borrow_id", row.borrow_id);
+      data.append("user_name", row.borrow_user_name);
       Axios({
         method: "post",
         url: "api/cir/ret_book",
         // data: {
         //   borrow_id: row.borrow_id,
         // },
-        data:data
+        data: data,
       }).then(function (res) {
         console.log(res);
         _this.$message({
@@ -137,12 +137,12 @@ export default {
     },
     renew(index, row) {
       let _this = this;
-            let data=new FormData();
-      data.append("borrow_id",row.borrow_id)
+      let data = new FormData();
+      data.append("borrow_id", row.borrow_id);
       Axios({
         method: "post",
         url: "api/cir/renew",
-        data: data
+        data: data,
       }).then(function (res) {
         _this.$message({
           message: res.data.msg,

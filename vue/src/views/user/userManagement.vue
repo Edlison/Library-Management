@@ -1,7 +1,7 @@
 <template>
   <div>
     <el-card class="box-card" style="width: 1000px; margin: 10px 0 0 50px">
-      <div style="text-align:center">
+      <div style="text-align: center">
         0-超级管理员 1-读者 2/3-采访/编目管理员 4-流通管理员 5-用户管理员
       </div>
     </el-card>
@@ -17,12 +17,25 @@
         <el-button type="primary" @click="addOpen">新增用户</el-button>
       </div>
       <!-- 表格 -->
-      <el-table :data="tables" >
+      <el-table :data="tables">
         <el-table-column prop="user_name" label="用户名" width="180">
         </el-table-column>
         <!-- <el-table-column prop="user_password" label="密码" width="180">
       </el-table-column> -->
-        <el-table-column prop="user_role" label="用户权限" width="200">
+        <el-table-column
+          prop="user_role"
+          :filters="[
+            { text: '0', value: '0' },
+            { text: '1', value: '1' },
+            { text: '2', value: '2' },
+            { text: '3', value: '3' },
+            { text: '4', value: '4' },
+            { text: '5', value: '5' },
+          ]"
+          :filter-method="filterTag"
+          label="用户权限"
+          width="200"
+        >
         </el-table-column>
         <el-table-column prop="user_borrowing" label="借书数量" width="200">
         </el-table-column>
@@ -34,7 +47,7 @@
               type="primary"
               size="small"
               @click="Edit(scope.$index, scope.row)"
-              >编辑</el-button
+              >修改密码</el-button
             >
             <el-button type="danger" size="small" @click="Delete(scope.row)"
               >删除</el-button
@@ -72,13 +85,14 @@
           >
             <el-input v-model="addForm.user_password" />
           </el-form-item>
-          <el-form-item label="用户权限" prop="user_role"
-                      :rules="[
+          <el-form-item
+            label="用户权限"
+            prop="user_role"
+            :rules="[
               { required: true, message: '请输入用户角色 ', trigger: 'blur' },
-            ]">
-            <el-input
-              v-model="addForm.user_role"
-            />
+            ]"
+          >
+            <el-input v-model="addForm.user_role" />
           </el-form-item>
           <el-form-item>
             <el-button type="primary" @click="addSubmit">确定增加</el-button>
@@ -115,6 +129,7 @@
 </template>
  
   <script>
+import { mapGetters } from "vuex";
 import Axios from "axios";
 import { Form } from "element-ui";
 export default {
@@ -124,7 +139,7 @@ export default {
       addrules: {
         name: [{ required: true, message: "请输入", trigger: "blur" }],
         year: [{ required: true, message: "请输入", trigger: "blur" }],
-        role:[{ required: true, message: "请输入", trigger: "blur" }]
+        role: [{ required: true, message: "请输入", trigger: "blur" }],
       },
       add: false,
       addForm: {},
@@ -138,6 +153,7 @@ export default {
     this.init();
   },
   computed: {
+    ...mapGetters(["name", "roles"]),
     // 模糊搜索
     tables() {
       const search = this.search;
@@ -155,7 +171,7 @@ export default {
           return Object.keys(data).some((key) => {
             // indexOf() 返回某个指定的字符在某个字符串中首次出现的位置，如果没有找到就返回-1；
             // 该方法对大小写敏感！所以之前需要toLowerCase()方法将所有查询到内容变为小写。
-            return String(data[key]).indexOf(search) > -1;
+            return String(data[key]).toLowerCase().indexOf(search) > -1;
           });
         });
       }
@@ -184,6 +200,13 @@ export default {
     },
     //打开编辑窗口
     Edit(index, row) {
+      if (this.roles == 5 && row.user_role == 0) {
+        this.$message({
+          message: "您无权修改超级管理员",
+          type: "error",
+        });
+        return;
+      }
       this.editForm = true;
       this.editsForm = Object.assign({}, row);
       this.editsForm.user_password = "";
@@ -266,6 +289,13 @@ export default {
     },
     //提交新增内容
     addSubmit() {
+      if (this.roles == 5 && this.addForm.user_role == 0) {
+        this.$message({
+          message: "您无权添加超级管理员",
+          type: "error",
+        });
+        return;
+      }
       let _this = this;
       let data = new FormData();
       data.append("user_name", this.addForm.user_name);
@@ -329,6 +359,7 @@ export default {
         // _this.dormitory = res.data.data;
       });
       this.add = false;
+      this.init();
     },
     //关闭新增时执行
     closeadd() {
@@ -342,6 +373,13 @@ export default {
     },
     //删除
     Delete(row) {
+      if (this.roles == 5 && row.user_role == 0) {
+        this.$message({
+          message: "您无权删除超级管理员",
+          type: "error",
+        });
+        return;
+      }
       let _this = this;
       let data = new FormData();
       data.append("user_id", row.user_id);
@@ -376,6 +414,10 @@ export default {
             message: "已取消删除",
           });
         });
+    },
+    filterTag(value, row) {
+      console.log(value, row);
+      return row.user_role == value;
     },
   },
 };

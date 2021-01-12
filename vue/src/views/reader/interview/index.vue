@@ -159,7 +159,7 @@ export default {
       formData.append("book_price", this.form.book_price?this.form.book_price:0);
       formData.append("book_ISBN", this.form.book_ISBN);
       formData.append("book_num", this.form.book_num);
-      formData.append("user_id", "1");
+      formData.append("user_id", "14");
       Axios({
         method: "post",
         url: "/api/interview/addinterviews",
@@ -168,12 +168,12 @@ export default {
         console.log(res)
         if (res.data.status == 0) {
           _this.$message({
-            message: res.data.msg,
+            message: "收到您的推荐！",
             type: "success",
           });
         } else {
           _this.$message({
-            message: res.data.msg,
+            message: res.data.data,
             type: "error",
           });
         }
