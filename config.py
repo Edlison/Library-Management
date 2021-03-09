@@ -9,7 +9,7 @@ class Config:
     DRIVER = 'pymysql'
     USERNAME = 'library'
     PASSWORD = 'library'
-    HOST = '119.23.107.61'
+    HOST = '121.4.249.118'
     PORT = '3306'
     DATABASE = 'library'
     SECRET_KEY = os.urandom(24)
